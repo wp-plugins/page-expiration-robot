@@ -57,3 +57,6 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 
 = 1.0 =
 Initial release
+
+== Screenshots ==
+http://i53.tinypic.com/28svakn.jpg
