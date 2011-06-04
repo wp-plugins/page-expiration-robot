@@ -9,7 +9,7 @@ Easily setup one time offers and schedule pages and posts to expire after certai
 
 == Description ==
 
-This free internet marketing plugin is people who wants to setup one time offers and schedule pages and posts to expire after certain amount of time and redirect expired visitors to a different offer or url.
+This free internet marketing plugin is for people who want to setup one time offers and schedule pages and posts to expire after certain amount of time and redirect expired visitors to a different offer or url.
 
 Here are just few of the amazing features:
 
