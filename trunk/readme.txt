@@ -59,4 +59,4 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 Initial release
 
 == Screenshots ==
-<img src="http://i53.tinypic.com/28svakn.jpg" alt="Page Expiration Robot" />
+`/tags/expirer-scr.jpg`
