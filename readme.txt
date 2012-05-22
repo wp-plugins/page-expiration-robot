@@ -1,22 +1,22 @@
 === Page Expiration Robot ===
 Contributors: John Socratous
 Tags: expire pages, expire posts, page expiration, page expiration robot
-Version: 1.2
+Version: 1.2.1
 Requires at least: 2.8
-Tested up to: 3.1.3
-Stable tag: 1.2
+Tested up to: 3.3.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 
-Easily setup one time offers and schedule pages and posts to expire after certain amount of time, then redirect visitors to a URL - automatically.
+Easily turn your WP blog posts (and pages) into one time offers and make timed-offers on a visitor-by-visitor basis, then redirect visitors to any URL - automatically!
 
 == Description ==
 
-This free internet marketing plugin is for people who want to setup one time offers and schedule pages and posts to expire after certain amount of time and redirect expired visitors to a different offer or url.
+This free internet marketing plugin is for people who want to setup one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL.
 
 Here are just few of the amazing features:
 
 1. Turn WP pages (or posts) into one-time offers
-2. Schedule expiration after certain amount of time
+2. Schedule expiration on specific date, time or period
 3. Redirect expired visitors to a different URL/offer
 4. Create perpetual expirations for automation
 5. Set visitors to expire either by IP or Cookie
@@ -51,6 +51,9 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 2) Fixed Scheduling for All Visitors: You can specify when a page will stop being available for all visitors and where to send people who try to access it after that date and time. For example, you can send visitors who arrive at the page prior to the launch to a page showing a countdown to the launch. Once the launch has ended, visitors can be sent to a page with a waiting list form or different offer.
 
 == Changelog ==
+
+= 1.2.1 =
+Added0 more flexible options to expire visitors on specific date, time or period
 
 = 1.2 =
 Fix compatibility with WPMU.
