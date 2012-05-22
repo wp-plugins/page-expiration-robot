@@ -1,4 +1,4 @@
-=== Page Expiration Robot ===
+Ôªø=== Page Expiration Robot ===
 Contributors: John Socratous
 Tags: expire pages, expire posts, page expiration, page expiration robot
 Version: 1.2.1
@@ -27,20 +27,20 @@ Here are just few of the amazing features:
 
 1. Upload the `page-expiration-robot` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-4. Create New Post or Page and youíll see the options below HTML Editor 
+4. Create New Post or Page and you‚Äôll see the options below HTML Editor 
 
 
 == Frequently Asked Questions ==
 
 = Where are the options of Page Expiration Robot? =
 
-Create New Post or Page and youíll see the options below HTML Editor 
+Create New Post or Page and you‚Äôll see the options below HTML Editor 
 
 = What's the difference between Time-Limited and One-Time Offers? =
 
-Time-Limited Offers: Set your visitors access to expire after certain amount of time and redirect them to a different URL with a higher price, different offer or even a ìsold outî page . You can set their access to expire after days, hours, minutes or  seconds. Works for both WP posts and pages.
+Time-Limited Offers: Set your visitors access to expire after certain amount of time and redirect them to a different URL with a higher price, different offer or even a ‚Äúsold out‚Äù page . You can set their access to expire after days, hours, minutes or  seconds. Works for both WP posts and pages.
 
-One-Time Offers: One-time-offers are a method for increasing sales by offering visitors only one chance to buy a product (or to buy it at the current low price), or lose out. If they leave the page or refresh their browser, they never see the offer again and if they attempt to return they are redirected to an ëoffer declinedí page that you specify.
+One-Time Offers: One-time-offers are a method for increasing sales by offering visitors only one chance to buy a product (or to buy it at the current low price), or lose out. If they leave the page or refresh their browser, they never see the offer again and if they attempt to return they are redirected to an ‚Äòoffer declined‚Äô page that you specify.
 
 = How visitors gets expired?
 
