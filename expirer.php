@@ -8,12 +8,13 @@ Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
 Author: Internet Marketing Wizard
 Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.2
+Version: 1.2.1
 License: GPLv2 or later
 
 */
-
+global $pluginpath;
 $pluginName = 'page-expiration-robot';
+$pluginpath = get_option('siteurl')."/wp-content/plugins/$pluginName/";
 function add_js_files(){
 
 global $pluginName;
@@ -47,6 +48,7 @@ method INT NOT NULL,
 timestamp BIGINT,
 redirection_url TEXT NOT NULL,
 blog_id BIGINT NOT NULL,
+expiry_date_time DATETIME NOT NULL,
 PRIMARY KEY (P_Id)
 );
 DOM;
@@ -76,6 +78,7 @@ $activation="";
 $link="";
 $expiry_method_0="";
 $expiry_method_1="";
+$expiry_method_2="";
 $default_day="";
 $default_hour="";
 $default_minute="";
@@ -95,6 +98,7 @@ if((isset($res['redirection_url'])) && (strlen($res['redirection_url']) >= 1)){
 $link=$res['redirection_url'];
 }
  $activation=" checked='true' ";
+ 
  if($res['method']==0){
  $method_0=" checked='true' ";
  }
@@ -104,12 +108,26 @@ $link=$res['redirection_url'];
  if($res['method']==2){
  $method_2=" checked='true' ";
  }
+ $expiry_method = "";
  if($res['expiry_time']==0){
  $expiry_method_1=" checked='true' ";
+ $expiry_method = 1;
  }
  else{
- $expiry_method_0=" checked='true' ";
+	 if($res['expiry_time']> 0 && $res['expiry_date_time']=="0000-00-00 00:00:00"){
+	 $expiry_method_2=" checked='true' ";
+	 $expiry_method = 2;
+	 }
+	 else
+	 {
+	 $expiry_method_0=" checked='true' ";
+	 $expiry_method = 0;
+	 }
  $time=$res['expiry_time'];
+ $expires_on=$res['expiry_date_time'];
+ $expires_on = str_replace(" ","-",$expires_on);
+ $expires_on = str_replace(":","-",$expires_on);
+ 
  $days=floor($time/(24*60*60));
 $hours=floor($time/(60*60));
 $minutes=floor($time/60);
@@ -118,34 +136,45 @@ $hours-=($days*24);
 $minutes-=(($days*24*60)+($hours*60));
 $seconds-=(($days*24*60*60)+($hours*60*60)+($minutes*60));
 
+/* << By COG IT */
+$exptime = $days."-".$hours."-".$minutes."-".$seconds;
+/* By COG IT >> */
+
 if($days<1){
 $default_day="";
 }
 else{
-$default_day="<option value='$days' selected>$days</option>";
+$default_day=$days;
 }
 if($hours<1){
 $default_hour="";
 }
 else{
-$default_hour="<option value='$hours' selected>$hours</option>";
+$default_hour=$hours;
 }
 if($minutes<1){
 $default_minute="";
 }
 else{
-$default_minute="<option value='$minutes' selected>$minutes</option>";
+$default_minute=$minutes;
 }
 if($seconds<1){
 $default_second="";
 }
 else{
-$default_second="<option value='$seconds' selected>$seconds</option>";
+$default_second=$seconds;
 }
 }
 }
+
+global $pluginpath;
+
 ?>
 	<p>
+	<script type="text/javascript" src="<?php echo $pluginpath; ?>js/jquery-ui-1.8.16.custom.min.js"></script>
+ <script type="text/javascript" src="<?php echo $pluginpath; ?>js/jquery-ui-sliderAccess.js"></script>
+ <script type="text/javascript" src="<?php echo $pluginpath; ?>js/jquery-ui-timepicker-addon.js"></script>
+ <link rel="stylesheet" type="text/css" href="<?php echo $pluginpath; ?>style/jquery-ui-1.css">
 		<script type='text/javascript'>
 		function numeric_entry(e)
 			{
@@ -170,7 +199,121 @@ $default_second="<option value='$seconds' selected>$seconds</option>";
 				{
 				document.getElementById("expiry_method").checked="checked";
 				}
+				
+				
+				
+				jQuery(document).ready(function(){
+					
+					//COG IT TEAM FOR DATE AND TIME
+		jQuery('#expiry_date_time').datetimepicker({
+			showOn: "button",
+   		buttonImage: "<?php echo $pluginpath; ?>images/datetime.png",
+   		buttonImageOnly: true,
+			showSecond: true,
+			showTime: false,
+				showTimepicker: false,
+			dateFormat: 'mm/dd/yy',
+			timeFormat: 'hh:mm:ss'
+		});
+   
+      jQuery('#expiry_date_time1').datetimepicker({
+			showOn: "button",
+   		buttonImage: "<?php echo $pluginpath; ?>images/datetime.png",
+   		buttonImageOnly: true,
+			showSecond: true,
+			showMillisec: true,
+			timeOnly: true,
+			hourText: 'Days',
+			minuteText: 'Hour',
+			secondText: 'Minute',
+			millisecText: 'Second',
+			timeOnlyTitle: 'Choose Period',
+			hourMax: 30,
+			minuteMax: 23,
+			secondMax: 59,
+			millisecMax: 59,
+			dateFormat: 'mm/dd/yy',
+			timeFormat: 'hh:mm:ss:l'
+		});
+					
+					
+					});
 		</script>
+		<script type="text/javascript" >
+jQuery(document).ready(function(){
+	jQuery("#expiry_date_time").change(function(){
+		
+			var d=new Date();
+			var dat=d.getDate();
+			var months = new Array('01','02','03','04','05','06','07','08','09','10','11','12');
+			var year=d.getFullYear();
+
+			var currentdate = months[d.getMonth()]+"/"+dat+"/"+year;
+
+			var date = jQuery("#expiry_date_time").val();
+			dates = date.substring(0, 10);
+			day = date.substring(3, 5);
+			/*hour = date.substring(11, 13);
+			minute = date.substring(14, 16);
+			second = date.substring(17, 19);*/
+			hour = 23;
+			minute = 59;
+			second = 59;
+			jQuery("#expiry_hour").val(hour);
+			jQuery("#expiry_minute").val(minute);
+			jQuery("#expiry_second").val(second);	
+			returndays = dateDiff(currentdate,dates);
+
+			var days = returndays;
+
+			jQuery("#expiry_day").val(days);
+
+		});
+		
+	jQuery("#expiry_date_time1").change(function(){
+
+			var period = jQuery("#expiry_date_time1").val();
+			day = period.substring(0, 2);
+			hour = period.substring(3, 5);
+			minute = period.substring(6, 8);
+			second = period.substring(9, 11);
+			jQuery("#expiry_hour").val(hour);
+			jQuery("#expiry_minute").val(minute);
+			jQuery("#expiry_second").val(second);	
+			jQuery("#expiry_day").val(day);
+
+		});
+	});
+
+function dateDiff(currentdate,dates) {
+date1 = new Date();
+date2 = new Date();
+diff  = new Date();
+
+date1temp = new Date(dates);
+date1.setTime(date1temp.getTime());
+
+date2temp = new Date(currentdate);
+date2.setTime(date2temp.getTime());
+diff.setTime(Math.abs(date1.getTime() - date2.getTime()));
+
+timediff = diff.getTime();
+days = Math.floor(timediff / (1000 * 60 * 60 * 24)); 
+
+return days; 
+}
+
+function checkDefault()
+				{
+				document.getElementById("expiry_method").checked="checked";
+				}
+				
+			function checkDefaultPeriod()
+				{
+				document.getElementById("expiry_method_period").checked="checked";
+				}
+
+</script>
 		<input type='hidden' name='second-excerpt' id='second-excerpt' />
 		<table><tr><td>
 		<label for="activation">Enable plugin for this post?</label>
@@ -186,194 +329,60 @@ $default_second="<option value='$seconds' selected>$seconds</option>";
 		<input type='radio' name='expiry_method' id='expiry_method' value='0' <?php echo $expiry_method_0; ?> />
 		</td>
 		<td>
-		<select name='expiry_day' style='width:70px' onchange="checkDefault();">
-		<option value='0'>day</option>
-		<?php echo $default_day; ?>
-		<option value='1'>1</option>
-		<option value='2'>2</option>
-		<option value='3'>3</option>
-		<option value='4'>4</option>
-		<option value='5'>5</option>
-		<option value='6'>6</option>
-		<option value='7'>7</option>
-		<option value='8'>8</option>
-		<option value='9'>9</option>
-		<option value='10'>10</option>
-		<option value='11'>11</option>
-		<option value='12'>12</option>
-		<option value='13'>13</option>
-		<option value='14'>14</option>
-		<option value='15'>15</option>
-		<option value='16'>16</option>
-		<option value='17'>17</option>
-		<option value='18'>18</option>
-		<option value='19'>19</option>
-		<option value='20'>20</option>
-		<option value='21'>21</option>
-		<option value='22'>22</option>
-		<option value='23'>23</option>
-		<option value='24'>24</option>
-		<option value='25'>25</option>
-		<option value='26'>26</option>
-		<option value='27'>27</option>
-		<option value='28'>28</option>
-		<option value='29'>29</option>
-		<option value='30'>30</option>
-		<option value='31'>31</option>
-		</select>
-		<select name='expiry_hour' style='width:70px' onchange="checkDefault();">
-		<option value='0'>hour</option>
-		<?php echo $default_hour; ?>
-		<option value='1'>1</option>
-		<option value='2'>2</option>
-		<option value='3'>3</option>
-		<option value='4'>4</option>
-		<option value='5'>5</option>
-		<option value='6'>6</option>
-		<option value='7'>7</option>
-		<option value='8'>8</option>
-		<option value='9'>9</option>
-		<option value='10'>10</option>
-		<option value='11'>11</option>
-		<option value='12'>12</option>
-		<option value='13'>13</option>
-		<option value='14'>14</option>
-		<option value='15'>15</option>
-		<option value='16'>16</option>
-		<option value='17'>17</option>
-		<option value='18'>18</option>
-		<option value='19'>19</option>
-		<option value='20'>20</option>
-		<option value='21'>21</option>
-		<option value='22'>22</option>
-		<option value='23'>23</option>
-		</select>
-		<select name='expiry_minute' style='width:70px' onchange="checkDefault();">
-		<option value='0'>minute</option>
-		<?php echo $default_minute; ?>
-		<option value='1'>1</option>
-		<option value='2'>2</option>
-		<option value='3'>3</option>
-		<option value='4'>4</option>
-		<option value='5'>5</option>
-		<option value='6'>6</option>
-		<option value='7'>7</option>
-		<option value='8'>8</option>
-		<option value='9'>9</option>
-		<option value='10'>10</option>
-		<option value='11'>11</option>
-		<option value='12'>12</option>
-		<option value='13'>13</option>
-		<option value='14'>14</option>
-		<option value='15'>15</option>
-		<option value='16'>16</option>
-		<option value='17'>17</option>
-		<option value='18'>18</option>
-		<option value='19'>19</option>
-		<option value='20'>20</option>
-		<option value='21'>21</option>
-		<option value='22'>22</option>
-		<option value='23'>23</option>
-		<option value='24'>24</option>
-		<option value='25'>25</option>
-		<option value='26'>26</option>
-		<option value='27'>27</option>
-		<option value='28'>28</option>
-		<option value='29'>29</option>
-		<option value='30'>30</option>
-		<option value='31'>31</option>
-		<option value='32'>32</option>
-		<option value='33'>33</option>
-		<option value='34'>34</option>
-		<option value='35'>35</option>
-		<option value='36'>36</option>
-		<option value='37'>37</option>
-		<option value='38'>38</option>
-		<option value='39'>39</option>
-		<option value='40'>40</option>
-		<option value='41'>41</option>
-		<option value='42'>42</option>
-		<option value='43'>43</option>
-		<option value='44'>44</option>
-		<option value='45'>45</option>
-		<option value='46'>46</option>
-		<option value='47'>47</option>
-		<option value='48'>48</option>
-		<option value='49'>49</option>
-		<option value='50'>50</option>
-		<option value='51'>51</option>
-		<option value='52'>52</option>
-		<option value='53'>53</option>
-		<option value='54'>54</option>
-		<option value='55'>55</option>
-		<option value='56'>56</option>
-		<option value='57'>57</option>
-		<option value='58'>58</option>
-		<option value='59'>59</option>
-		</select>
-		<select name='expiry_second' style='width:70px' onchange="checkDefault();">
-		<option value='0'>second</option>
-		<?php echo $default_second; ?>
-		<option value='1'>1</option>
-		<option value='2'>2</option>
-		<option value='3'>3</option>
-		<option value='4'>4</option>
-		<option value='5'>5</option>
-		<option value='6'>6</option>
-		<option value='7'>7</option>
-		<option value='8'>8</option>
-		<option value='9'>9</option>
-		<option value='10'>10</option>
-		<option value='11'>11</option>
-		<option value='12'>12</option>
-		<option value='13'>13</option>
-		<option value='14'>14</option>
-		<option value='15'>15</option>
-		<option value='16'>16</option>
-		<option value='17'>17</option>
-		<option value='18'>18</option>
-		<option value='19'>19</option>
-		<option value='20'>20</option>
-		<option value='21'>21</option>
-		<option value='22'>22</option>
-		<option value='23'>23</option>
-		<option value='24'>24</option>
-		<option value='25'>25</option>
-		<option value='26'>26</option>
-		<option value='27'>27</option>
-		<option value='28'>28</option>
-		<option value='29'>29</option>
-		<option value='30'>30</option>
-		<option value='31'>31</option>
-		<option value='32'>32</option>
-		<option value='33'>33</option>
-		<option value='34'>34</option>
-		<option value='35'>35</option>
-		<option value='36'>36</option>
-		<option value='37'>37</option>
-		<option value='38'>38</option>
-		<option value='39'>39</option>
-		<option value='40'>40</option>
-		<option value='41'>41</option>
-		<option value='42'>42</option>
-		<option value='43'>43</option>
-		<option value='44'>44</option>
-		<option value='45'>45</option>
-		<option value='46'>46</option>
-		<option value='47'>47</option>
-		<option value='48'>48</option>
-		<option value='49'>49</option>
-		<option value='50'>50</option>
-		<option value='51'>51</option>
-		<option value='52'>52</option>
-		<option value='53'>53</option>
-		<option value='54'>54</option>
-		<option value='55'>55</option>
-		<option value='56'>56</option>
-		<option value='57'>57</option>
-		<option value='58'>58</option>
-		<option value='59'>59</option>
-		</select>
+		<!-- cog it team -->
+		<?php 
+		
+					$expiry_date_time=$res['expiry_date_time'];
+					$ye = substr($expiry_date_time, 0, 4);
+					$mo = substr($expiry_date_time, 5, 2);
+					$da = substr($expiry_date_time, 8, 2);
+					$ti =substr($expiry_date_time, 11, 8);
+					
+					if($expiry_date_time != "" && $expiry_method==0)		
+					{
+						$expiry_dateandtime = $mo."/".$da."/".$ye;//." ".$ti;		
+					}		
+					else {
+						$expiry_dateandtime="";
+					}
+					$expiry_period = "";
+					if ($expiry_method == 2)
+					{
+						if (strlen($days) == 1)
+							$expiry_period .= "0";
+						$expiry_period.= $days.":";
+						if (strlen($hours) == 1)
+							$expiry_period .= "0";
+						$expiry_period.= $hours.":";
+						if (strlen($minutes) == 1)
+							$expiry_period .= "0";
+						$expiry_period.= $minutes.":";
+						if (strlen($seconds) == 1)
+							$expiry_period .= "0";
+						$expiry_period.= $seconds;
+					}	
+					/*
+					$h = substr($ti, 0, 2);
+					$m = substr($ti, 3, 2);
+					$s = substr($ti, 6, 2);*/
+
+		?>
+		A Specific DATE <input type="text" name="expiry_date_time"  id="expiry_date_time" value="<?php echo $expiry_dateandtime; ?>" onchange="checkDefault();"/>
+		
+		<input type="hidden" name='expiry_day' id="expiry_day" value="<?php echo ($default_day=="")?'0':$default_day; ?>"></input>
+		<input type="hidden" name='expiry_hour' id="expiry_hour" value="<?php echo ($default_hour=="")?'0':$default_hour; ?>" ></input>
+		<input type="hidden" name='expiry_minute' id="expiry_minute" value="<?php echo ($default_minute=="")?'0':$default_minute; ?>" ></input>
+		<input type="hidden" name='expiry_second' id="expiry_second" value="<?php echo ($default_second=="")?'0':$default_second;?>"></input>			
+		</td>
+		</tr>
+		<tr>
+		<td></td>
+		<td>
+		<input type='radio' name='expiry_method' value='2' id='expiry_method_period' <?php echo $expiry_method_2; ?> />
+		</td>
+		<td colspan="2">
+		A Specific TIME&nbsp; <input type="text" name="expiry_date_time1"  id="expiry_date_time1" value="<?php echo $expiry_period; ?>" onchange="checkDefaultPeriod();"/>
+			
 		</td>
 		</tr>
 		<tr>
@@ -421,7 +430,7 @@ return $post_id;
 if(!is_numeric($_POST['expiry_method'])){
 return $post_id;
 }
-if($_POST['expiry_method']>0){
+if($_POST['expiry_method']==1){
 $_POST['expiry_day']=0;
 $_POST['expiry_hour']=0;
 $_POST['expiry_minute']=0;
@@ -436,17 +445,19 @@ $_POST['expiry_second']=0;
 	  return $post_id;
 	  	if(!is_numeric($_POST['expiry_second']))
 	  return $post_id;	
-	if(!isset($_POST['method'])){
+	  
+	if(!isset($_POST['expiry_method'])){
 	$method=0;
 	}
-	elseif(!is_numeric($_POST['method'])){
+	elseif(!is_numeric($_POST['expiry_method'])){
 	$method=0;
 	}
 	else{
 	$method=addslashes($_POST['method']);
 	}
+	
 	$pattern = '/^(([\w]+:)?\/\/)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,253}[\d\w]\.)+[\w]{2,4}(:[\d]+)?(\/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&amp;?([-+_~.\d\w]|%[a-fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?$/';
-	if(!preg_match($pattern, $_POST['redirection_url'])){
+	/*if(!preg_match($pattern, $_POST['redirection_url'])){
 		$url="";
 	}
 	else{
@@ -459,7 +470,68 @@ $_POST['expiry_second']=0;
 	}
 	else{
 	$timestamp=0;
+	}*/
+	
+	if(!preg_match('/^(?:[;\/?:@&=+$,]|(?:[^\W_]|[-_.!~*\()\[\] ])|(?:%[\da-fA-F]{2}))*$/', $_POST['redirection_url'])){
+		$url="";
 	}
+	else{
+	$url=addslashes($_POST['redirection_url']);
+	}
+
+	if($method==1){
+		$timestamp=time();
+	}
+	elseif($method==2){
+		$timestamp=time();
+	}
+	else{
+		$timestamp=0;
+	}
+	$timestamp=time();
+	$expiry_date_time = $_POST["expiry_date_time"];
+	
+	//echo $expiry_date_time."<br />";
+	$m = substr($expiry_date_time, 0, 2);
+	$d = substr($expiry_date_time, 3, 2);
+	$y = substr($expiry_date_time, 6, 4);
+	$t =substr($expiry_date_time, 11, 8);
+
+	//echo $month."---".$day."--".$year."<br />";
+	//echo $time."<br />";
+	$expiry_dateandtime = $y."-".$m."-".$d." ".$t;
+
+	/* << By COG IT */
+	if($_POST['expiry_method']==0){
+		$timestamp=time();
+		$endtime = strtotime($_POST["expiry_date_time"]." 23:59:59");
+		$exptime = $endtime - $timestamp;
+		$expiry_dateandtime = $y."-".$m."-".$d." 23:59:59";
+	}
+	else if($_POST['expiry_method']==2){
+		$exptime = 0;
+		$exptime = $_POST['expiry_day'] * 24 * 60 * 60;
+		$exptime+= $_POST['expiry_hour'] * 60 * 60;
+		$exptime+= $_POST['expiry_minute'] * 60;
+		$exptime+= $_POST['expiry_second'];
+		$expiry_dateandtime = "";
+		
+		
+	}
+	//echo date("Y-m-d H:i:s",$endtime)."====".date("Y-m-d H:i:s",$timestamp)."===".$timestamp."=======".$method;exit();
+	/*$_POST['expiry_day'] = $deduct = floor($exptime/(24*60*60));
+	$exptime = $exptime - ($deduct*24*60*60);
+	$_POST['expiry_hour'] = $deduct = floor($exptime/(60*60));
+	$exptime = $exptime - ($deduct*60*60);
+	$_POST['expiry_minute'] = $deduct = floor($exptime/(60));
+	$exptime = $exptime - ($deduct*60);
+	$_POST['expiry_second'] = $deduct = floor($exptime);
+	$time=addslashes(($_POST['expiry_day']*24*60*60)+($_POST['expiry_hour']*60*60)+($_POST['expiry_minute']*60)+($_POST['expiry_second']));*/
+$time = $exptime;
+
+
+	/* By COG IT >> */	
+	$pid=addslashes($post_id);
 	
 	global $blog_id;
 	 $blog_id;
@@ -472,7 +544,10 @@ $_POST['expiry_second']=0;
 	global $wpdb;
 	//$query3="ALTER TABLE wp_page_expiry_info ADD blog_id BIGINT NOT NULL";
 	
-	$query="INSERT INTO wp_page_expiry_info (expiry_time,redirection_url,post_id,method,timestamp,blog_id) VALUES ($time,'$url',$pid,$method,$timestamp,$blog_id)";
+	$query="INSERT INTO wp_page_expiry_info (expiry_time,redirection_url,post_id,method,timestamp,blog_id,expiry_date_time) VALUES ('$time','$url','$pid','$method','$timestamp','$blog_id','$expiry_dateandtime')";
+	
+
+	
 	$query2="DELETE FROM wp_page_expiry_info WHERE post_id=$pid";
 	//$wpdb->query($query3);
 	$wpdb->query($query2);
