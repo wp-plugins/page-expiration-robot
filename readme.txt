@@ -1,17 +1,17 @@
 ﻿=== Page Expiration Robot ===
 Contributors: John Socratous
-Tags: expire pages, expire posts, page expiration, page expiration robot
+Tags: expire pages, expire posts, countdown, timer, counter, page expiration, page expiration robot
 Version: 1.2.1
 Requires at least: 2.8
 Tested up to: 3.3.2
 Stable tag: 1.2.2
 License: GPLv2 or later
 
-Expire posts and pages on a visitor-by-visitor basis after a specified amount of time (including one-time-offers), and then redirect them to any URL!
+Expire posts and pages on a visitor-by-visitor basis after a specified amount of time (including one-time-offers), and then redirect them to any URL! (Optionally, an attention-grabbing countdown timer can be added!)
 
 == Description ==
 
-This free internet marketing plugin is for people who want to setup one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL.
+This free internet marketing plugin is for people who want to setup one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. Optionally, you can add an attention-grabbing countdown timer that will show visitors every second they’re losing by not taking action immediately! 
 
 Here are just few of the amazing features:
 
