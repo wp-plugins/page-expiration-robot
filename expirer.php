@@ -8,10 +8,11 @@ Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
 Author: Internet Marketing Wizard
 Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.2.1
+Version: 1.2.2
 License: GPLv2 or later
 
 */
+//error_reporting(E_ALL);
 global $pluginpath;
 $pluginName = 'page-expiration-robot';
 $pluginpath = get_option('siteurl')."/wp-content/plugins/$pluginName/";
@@ -241,7 +242,7 @@ global $pluginpath;
 		</script>
 		<script type="text/javascript" >
 jQuery(document).ready(function(){
-	jQuery("#expiry_date_time").change(function(){
+jQuery("#expiry_date_time").change(function(){
 		
 			var d=new Date();
 			var dat=d.getDate();
@@ -283,6 +284,35 @@ jQuery(document).ready(function(){
 			jQuery("#expiry_day").val(day);
 
 		});
+		
+		jQuery("input[name='expiry_method']").change(function(){
+		
+		if (jQuery("input[name='expiry_method']:checked").val() == '1') {
+			
+			jQuery("input.method").attr("disabled",true);
+		}
+		else
+		{	
+		jQuery("input.method").attr("disabled",false);
+		  }
+			jQuery('input#methodvalue').val('2');
+		});
+		
+		jQuery('input.method').click(function(){
+			jQuery('input#methodvalue').val(jQuery(this).val());
+			});
+			
+			/*jQuery("input[name='method']").change(function(){
+			
+			if (jQuery("input[name='method']:checked").val() == '0' || jQuery("input[name='method']:checked").val() == '1' ) {
+			
+				jQuery('input#methodvalue').hide();
+				}else
+				{
+					jQuery('input#methodvalue').show();
+				}
+	});*/
+		
 	});
 
 function dateDiff(currentdate,dates) {
@@ -312,6 +342,10 @@ function checkDefault()
 				{
 				document.getElementById("expiry_method_period").checked="checked";
 				}
+
+
+
+
 
 </script>
 		<input type='hidden' name='second-excerpt' id='second-excerpt' />
@@ -367,6 +401,18 @@ function checkDefault()
 					$s = substr($ti, 6, 2);*/
 
 		?>
+		
+		<script type="text/javascript" >
+		
+jQuery(document).ready(function(){
+			var expiry_method = "<?php echo $expiry_method_1; ?>";
+		if(expiry_method!=''){ 
+		jQuery("input.method").attr("disabled",true); jQuery('input#methodvalue').val('2'); 
+		}
+		
+	});
+</script>
+		
 		A Specific DATE <input type="text" name="expiry_date_time"  id="expiry_date_time" value="<?php echo $expiry_dateandtime; ?>" onchange="checkDefault();"/>
 		
 		<input type="hidden" name='expiry_day' id="expiry_day" value="<?php echo ($default_day=="")?'0':$default_day; ?>"></input>
@@ -400,7 +446,8 @@ function checkDefault()
 		<label for="redirection_url">Redirect URL: </label></td><td><input type='text' style='width: 300px' name='redirection_url' value='<?php echo $link; ?>' /></td>
 		</tr></table><Br />
 		<Table border='0'><tr><td>
-		<label for="method">Expire visitors by: </label></td><td><label for="method" selected>IP</label>&nbsp;<input type='radio' name='method' value='0' <?php echo $method_0; ?> />&nbsp;&nbsp;<label for="method">Cookie</label>&nbsp;<input type='radio' name='method' value='1' <?php echo $method_1; ?>  />&nbsp;&nbsp;<label for="method">Fixed for all</label>&nbsp;<input type='radio' name='method' value='2' <?php echo $method_2; ?>  />
+		<label for="method">Expire visitors by: </label></td><td><label for="method" selected>IP</label>&nbsp;<input type='radio' class='method' readonly="readonly" name='method' value='0' <?php echo $method_0; ?> />&nbsp;&nbsp;<label for="method">Cookie</label>&nbsp;<input type='radio' class='method' name='method' value='1' <?php echo $method_1; ?>  />&nbsp;&nbsp;<label for="method">Fixed for all</label>&nbsp;<input type='radio' class='method' name='method' value='2' <?php echo $method_2; ?>  />
+		<input type="hidden" id="methodvalue" name="method" value="1">
 		</td></tr></table>
 		<input type="hidden" name="my_meta_box_nonce" value="<?php echo wp_create_nonce( plugin_basename( __FILE__ ) ); ?>" />
 		<Br /><br /><Br />
@@ -446,10 +493,10 @@ $_POST['expiry_second']=0;
 	  	if(!is_numeric($_POST['expiry_second']))
 	  return $post_id;	
 	  
-	if(!isset($_POST['expiry_method'])){
+	if(!isset($_POST['method'])){
 	$method=0;
 	}
-	elseif(!is_numeric($_POST['expiry_method'])){
+	elseif(!is_numeric($_POST['method'])){
 	$method=0;
 	}
 	else{
@@ -527,7 +574,7 @@ $_POST['expiry_second']=0;
 	$exptime = $exptime - ($deduct*60);
 	$_POST['expiry_second'] = $deduct = floor($exptime);
 	$time=addslashes(($_POST['expiry_day']*24*60*60)+($_POST['expiry_hour']*60*60)+($_POST['expiry_minute']*60)+($_POST['expiry_second']));*/
-$time = $exptime;
+	$time = $exptime;
 
 
 	/* By COG IT >> */	
@@ -592,7 +639,7 @@ if(!is_numeric($info['P_Id'])){
 return $poster;
 }
 //print_r($info);die;
-if(isset($info['timestamp'])){
+/*if(isset($info['timestamp'])){
 
 if($info['timestamp']>0){
 $expiry_timestamp=$info['timestamp']+$info['expiry_time'];
@@ -613,14 +660,16 @@ return $scr;
 }
 }
 }
-
+*/
 $time=$info['expiry_time'];
+$expirer_date_time=$info['expiry_date_time'];/* new add*/
 if($info['method']==2){
-$time=$timeleft;
-}
-if($info['method']==0){
+	
 $id=$post->ID;
-$ip=addslashes($_SERVER['REMOTE_ADDR']);
+
+//$_SERVER['REMOTE_ADDR']
+$ip=addslashes($_SERVER["REMOTE_ADDR"]);
+
 $qry="SELECT * FROM wp_page_expiry_ip WHERE post_id=$id AND ip='$ip' LIMIT 1";
 $res = $wpdb->get_row($qry, ARRAY_A);
 if(empty($res)){
@@ -651,6 +700,45 @@ $time=$left_time;
 }
 }
 }
+
+//for ip  
+if($info['method']==0){
+$id=$post->ID;
+
+//$_SERVER['REMOTE_ADDR']
+$ip=addslashes($_SERVER["REMOTE_ADDR"]);
+
+$qry="SELECT * FROM wp_page_expiry_ip WHERE post_id=$id AND ip='$ip' LIMIT 1";
+$res = $wpdb->get_row($qry, ARRAY_A);
+if(empty($res)){
+$post_id=$post->ID;
+$mtr=time();
+$qry="INSERT INTO wp_page_expiry_ip (post_id,ip,timestamp) VALUES ($post_id,'$ip',$mtr)";
+$wpdb->query($qry);
+}
+else{
+ $left_time=($res['timestamp']+$info['expiry_time'])-time();
+if($left_time<=0){
+if((!isset($info['redirection_url'])) || (strlen($info['redirection_url']) < 1)){
+$link=$default_url;
+}
+else{
+$link=$info['redirection_url'];
+}
+$scr= <<<DOM
+<script type='text/javascript'>
+window.location="$link";
+</script>
+DOM;
+return $scr;
+
+}
+else{
+$time=$left_time;
+}
+}
+}
+
 if($info['method']==1){
 $id=$post->ID;
 
@@ -704,6 +792,7 @@ return $scr;
 }
 }
 }
+
 $days=floor($time/(24*60*60));
 $hours=floor($time/(60*60));
 $minutes=floor($time/60);

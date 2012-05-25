@@ -4,7 +4,7 @@ Tags: expire pages, expire posts, page expiration, page expiration robot
 Version: 1.2.1
 Requires at least: 2.8
 Tested up to: 3.3.2
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 
 Easily turn your WP blog posts (and pages) into one time offers and make timed-offers on a visitor-by-visitor basis, then redirect visitors to any URL - automatically!
@@ -52,8 +52,12 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 
 == Changelog ==
 
+= 1.2.2 =
+Fixed the 'First Visit Only' redirection bug
+Fixed the IP expiration bug
+
 = 1.2.1 =
-Added0 more flexible options to expire visitors on specific date, time or period
+Added more flexible options to expire visitors on specific date, time or period
 
 = 1.2 =
 Fix compatibility with WPMU.
