@@ -7,7 +7,7 @@ Tested up to: 3.3.2
 Stable tag: 1.2.2
 License: GPLv2 or later
 
-Easily turn your WP blog posts (and pages) into one time offers and make timed-offers on a visitor-by-visitor basis, then redirect visitors to any URL - automatically!
+Expire posts and pages on a visitor-by-visitor basis after a specified amount of time (including one-time-offers), and then redirect them to any URL!
 
 == Description ==
 
