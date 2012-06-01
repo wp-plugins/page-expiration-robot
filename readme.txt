@@ -4,7 +4,7 @@ Tags: expire pages, expire posts, countdown, timer, counter, expiration, page ex
 Version: 1.2.3
 Requires at least: 2.8
 Tested up to: 3.3.2
-Stable tag: 1.2.3
+Stable tag: 1.23
 License: GPLv2 or later
 
 Expire posts or pages on a visitor-by-visitor basis after a specified amount of time, redirect them to any URL and start increasing your conversions!
