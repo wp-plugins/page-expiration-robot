@@ -8,7 +8,7 @@ Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
 Author: Internet Marketing Wizard
 Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.2
+Version: 1.2.3
 License: GPLv2 or later
 
 */
