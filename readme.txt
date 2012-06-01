@@ -7,7 +7,7 @@ Tested up to: 3.3.2
 Stable tag: 1.2.3
 License: GPLv2 or later
 
-Expire on a visitor-by-visitor basis after a specified amount of time or period (including on one-time-offers), and then redirect them to any URL!
+Expire posts or pages on a visitor-by-visitor basis after a specified amount of time, redirect them to any URL and start increasing your conversions!
 
 == Description ==
 
