@@ -1,7 +1,7 @@
 ﻿=== Page Expiration Robot ===
 Contributors: John Socratous
 Tags: expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot
-Version: 1.2.1
+Version: 1.2.3
 Requires at least: 2.8
 Tested up to: 3.3.2
 Stable tag: 1.2.3
