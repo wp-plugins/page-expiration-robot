@@ -8,7 +8,7 @@ Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
 Author: Internet Marketing Wizard
 Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.2.2
+Version: 1.2
 License: GPLv2 or later
 
 */
@@ -24,7 +24,7 @@ global $pluginName;
   $path2 = get_option('siteurl')."/wp-content/plugins/$pluginName/jquery_002.js";
   $path4= get_option('siteurl')."/wp-content/plugins/$pluginName/style.css";
   wp_enqueue_style("expirer",$path4);
-  
+  $path = get_option('siteurl')."/wp-content/plugins/$pluginName/js/jquery.lwtCountdown-1.0.js";
   wp_enqueue_script("jquery_conter", $path,array('jquery'),'1.0',true);
   
   
@@ -446,7 +446,7 @@ jQuery(document).ready(function(){
 		<label for="redirection_url">Redirect URL: </label></td><td><input type='text' style='width: 300px' name='redirection_url' value='<?php echo $link; ?>' /></td>
 		</tr></table><Br />
 		<Table border='0'><tr><td>
-		<label for="method">Expire visitors by: </label></td><td><label for="method" selected>IP</label>&nbsp;<input type='radio' class='method' readonly="readonly" name='method' value='0' <?php echo $method_0; ?> />&nbsp;&nbsp;<label for="method">Cookie</label>&nbsp;<input type='radio' class='method' name='method' value='1' <?php echo $method_1; ?>  />&nbsp;&nbsp;<label for="method">Fixed for all</label>&nbsp;<input type='radio' class='method' name='method' value='2' <?php echo $method_2; ?>  />
+		<label for="method">Expire visitors by: </label></td><td><input type='radio' class='method' readonly="readonly" name='method' value='0' <?php echo $method_0; ?> />&nbsp;<label for="method" selected>IP</label>&nbsp;&nbsp;<input type='radio' class='method' name='method' value='1' <?php echo $method_1; ?>  />&nbsp;<label for="method">Cookie</label>&nbsp;&nbsp;<input type='radio' class='method' name='method' value='2' <?php echo $method_2; ?>  />&nbsp;<label for="method">Fixed for all</label>
 		<input type="hidden" id="methodvalue" name="method" value="1">
 		</td></tr></table>
 		<input type="hidden" name="my_meta_box_nonce" value="<?php echo wp_create_nonce( plugin_basename( __FILE__ ) ); ?>" />
@@ -611,10 +611,12 @@ $_POST['expiry_second']=0;
      $blog_id;
 	global $current_blog;
 	
-print_r($current_blog->domain);}
+//print_r($current_blog->domain);
+}
 
 
 $dys = ""; $hys = ""; $mys = ""; $sys ="";$link="";
+
 function add_countdown_now($poster){
 global $default_url, $pluginName;
 if(is_home()){
@@ -638,7 +640,9 @@ return $poster;
 if(!is_numeric($info['P_Id'])){
 return $poster;
 }
-//print_r($info);die;
+//print_r($info);
+//echo $left_time=($info['timestamp']+$info['expiry_time'])-time();
+//die;
 /*if(isset($info['timestamp'])){
 
 if($info['timestamp']>0){
@@ -663,45 +667,31 @@ return $scr;
 */
 $time=$info['expiry_time'];
 $expirer_date_time=$info['expiry_date_time'];/* new add*/
+
+
 if($info['method']==2){
 	
-$id=$post->ID;
-
-//$_SERVER['REMOTE_ADDR']
-$ip=addslashes($_SERVER["REMOTE_ADDR"]);
-
-$qry="SELECT * FROM wp_page_expiry_ip WHERE post_id=$id AND ip='$ip' LIMIT 1";
-$res = $wpdb->get_row($qry, ARRAY_A);
-if(empty($res)){
-$post_id=$post->ID;
-$mtr=time();
-$qry="INSERT INTO wp_page_expiry_ip (post_id,ip,timestamp) VALUES ($post_id,'$ip',$mtr)";
-$wpdb->query($qry);
-}
-else{
- $left_time=($res['timestamp']+$info['expiry_time'])-time();
-if($left_time<=0){
-if((!isset($info['redirection_url'])) || (strlen($info['redirection_url']) < 1)){
-$link=$default_url;
-}
-else{
-$link=$info['redirection_url'];
-}
+	$left_time=($info['timestamp']+$info['expiry_time'])-time();
+	if($left_time<=0){
+		if((!isset($info['redirection_url'])) || (strlen($info['redirection_url']) < 1)){
+		$link=$default_url;
+		}
+		else{
+			$link=$info['redirection_url'];
+		}
 $scr= <<<DOM
 <script type='text/javascript'>
 window.location="$link";
 </script>
 DOM;
-return $scr;
+		return $scr;
+	}
+	$time=$left_time;
+}
 
-}
-else{
-$time=$left_time;
-}
-}
-}
 
 //for ip  
+
 if($info['method']==0){
 $id=$post->ID;
 
@@ -852,9 +842,9 @@ $poster.= <<<DOM
 <Br />
 <!-- changes made by webmask on 16th May 2011--->
 <script type='text/javascript'>
-
-jQuery(document).ready(function($){
-  $('#counter').countDown({
+jQuery.noConflict();
+jQuery(document).ready(function(){
+  jQuery(document).countDown({
     stepTime: 60,
     format: "dd:hh:mm:ss",
     startTime: "$dys:$hys:$mys:$sys",

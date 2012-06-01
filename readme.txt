@@ -1,13 +1,13 @@
 ﻿=== Page Expiration Robot ===
 Contributors: John Socratous
-Tags: expire pages, expire posts, countdown, timer, counter, page expiration, page expiration robot
+Tags: expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot
 Version: 1.2.1
 Requires at least: 2.8
 Tested up to: 3.3.2
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 
-Expire posts and pages on a visitor-by-visitor basis after a specified amount of time (including one-time-offers), and then redirect them to any URL! (Optionally, an attention-grabbing countdown timer can be added!)
+Schedule posts and pages to expire on a visitor-by-visitor basis after a specified amount of time or period (including on one-time-offers), and then redirect them to any URL. Optionally, add LIVE attention-grabbing countdown timer to create a real fear of urgency.
 
 == Description ==
 
@@ -52,8 +52,12 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 
 == Changelog ==
 
+= 1.2.3 =
+Fixed major bug on 'Fixed For All' option
+
+
 = 1.2.2 =
-Fixed the 'First Visit Only' redirection bug
+Fixed the 'First Visit Only' redirection bug,
 Fixed the IP expiration bug
 
 = 1.2.1 =
