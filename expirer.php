@@ -38,7 +38,7 @@ global $wpdb;
 add_action( 'admin_menu', 'my_create_post_meta_box' );
 add_action( 'save_post', 'my_save_post_meta_box', 10, 2 );
 add_filter('the_content','add_countdown_now');
-$default_url="http://www.pageexpirationrobot.com";
+$default_url="http://www.pageexpirationrobot.com/free-version-upgrade";
 $methods=array(0=>"IP",1=>"Cookie",2=>"Fixed for all");
 $qry= <<<DOM
 CREATE TABLE IF NOT EXISTS wp_page_expiry_info (
@@ -452,7 +452,7 @@ jQuery(document).ready(function(){
 		<input type="hidden" name="my_meta_box_nonce" value="<?php echo wp_create_nonce( plugin_basename( __FILE__ ) ); ?>" />
 		<Br /><br /><Br />
 		<div style='width:450px;'>
-		OPTIONAL: Want to create 'real' urgency? <a href='http://www.pageexpirationrobot.com'>Add Integrated LIVE Counters!</a><Br />
+		OPTIONAL: Want to create 'real' urgency? <a href='http://www.pageexpirationrobot.com/free-version-upgrade'>Add Integrated LIVE Counters!</a><Br />
 		</div>
 	</p>
 <?php
