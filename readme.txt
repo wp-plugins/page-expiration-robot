@@ -85,4 +85,4 @@ plugin name spelling mistake fixed.
 Initial release
 
 == Screenshots ==
-1. Screenshot of Page Expiration Robot options.
+2. Screenshot of Page Expiration Robot options.
