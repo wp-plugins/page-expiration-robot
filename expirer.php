@@ -8,7 +8,7 @@ Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
 Author: Internet Marketing Wizard
 Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.23
+Version: 1.24
 License: GPLv2 or later
 
 */
@@ -46,6 +46,7 @@ P_Id BIGINT NOT NULL AUTO_INCREMENT,
 post_id BIGINT NOT NULL,
 expiry_time BIGINT NOT NULL,
 method INT NOT NULL,
+event INT NOT NULL,
 timestamp BIGINT,
 redirection_url TEXT NOT NULL,
 blog_id BIGINT NOT NULL,
@@ -87,6 +88,7 @@ $default_second="";
 $method_0="";
 $method_1="";
 $method_2="";
+$event_0="";
 $id=$post->ID;
 global $wpdb;
 global $blog_id;
@@ -124,6 +126,12 @@ $link=$res['redirection_url'];
 	 $expiry_method_0=" checked='true' ";
 	 $expiry_method = 0;
 	 }
+
+if($res['event']=='0'){
+		$event_0=" checked='true' ";
+	}else{
+		$event_0='';
+	}
  $time=$res['expiry_time'];
  $expires_on=$res['expiry_date_time'];
  $expires_on = str_replace(" ","-",$expires_on);
@@ -277,7 +285,7 @@ jQuery("#expiry_date_time").change(function(){
 			day = period.substring(0, 2);
 			hour = period.substring(3, 5);
 			minute = period.substring(6, 8);
-			second = period.substring(9, 11);
+			second = period.substring(9, 12);
 			jQuery("#expiry_hour").val(hour);
 			jQuery("#expiry_minute").val(minute);
 			jQuery("#expiry_second").val(second);	
@@ -449,6 +457,9 @@ jQuery(document).ready(function(){
 		<label for="method">Expire visitors by: </label></td><td><input type='radio' class='method' readonly="readonly" name='method' value='0' <?php echo $method_0; ?> />&nbsp;<label for="method" selected>IP</label>&nbsp;&nbsp;<input type='radio' class='method' name='method' value='1' <?php echo $method_1; ?>  />&nbsp;<label for="method">Cookie</label>&nbsp;&nbsp;<input type='radio' class='method' name='method' value='2' <?php echo $method_2; ?>  />&nbsp;<label for="method">Fixed for all</label>
 		<input type="hidden" id="methodvalue" name="method" value="1">
 		</td></tr></table>
+		<Table border='0'><tr><td>
+		<label for="event">Event On Finish: </label></td><td valign="top"><div style="margin-top:9px;">&nbsp;<input type='checkbox' name='event' id="redirect_auto" value='0' <?php echo $event_0; ?> />&nbsp;<label for="event" selected>Redirect automatically</label></div></td></tr>
+	   </Table>
 		<input type="hidden" name="my_meta_box_nonce" value="<?php echo wp_create_nonce( plugin_basename( __FILE__ ) ); ?>" />
 		<Br /><br /><Br />
 		<div style='width:450px;'>
@@ -590,8 +601,11 @@ $_POST['expiry_second']=0;
 	//echo "INSERT INTO wp_page_expiry_info (expiry_time,redirection_url,post_id,method,timestamp,blog_id) VALUES ($time,'$url',$pid,$method,$timestamp,$blog_id)";
 	global $wpdb;
 	//$query3="ALTER TABLE wp_page_expiry_info ADD blog_id BIGINT NOT NULL";
-	
-	$query="INSERT INTO wp_page_expiry_info (expiry_time,redirection_url,post_id,method,timestamp,blog_id,expiry_date_time) VALUES ('$time','$url','$pid','$method','$timestamp','$blog_id','$expiry_dateandtime')";
+	if (isset($_POST['event']))
+		$event=$_POST['event'];
+	else
+		$event = '-1';
+	$query="INSERT INTO wp_page_expiry_info (expiry_time,redirection_url,post_id,method,timestamp,blog_id,expiry_date_time,event) VALUES ('$time','$url','$pid','$method','$timestamp','$blog_id','$expiry_dateandtime','$event')";
 	
 
 	
@@ -838,21 +852,15 @@ $mys="0".$minutes;
 if($seconds<=9){
 $sys="0".$seconds;
 }
+if ($info['event'] != 0)
+	$link = "#";
 $poster.= <<<DOM
-<Br />
+<Br /><div id="counter" style="display:none;"></div>
 <!-- changes made by webmask on 16th May 2011--->
 <script type='text/javascript'>
 jQuery.noConflict();
 jQuery(document).ready(function(){
-  jQuery(document).countDown({
-    stepTime: 60,
-    format: "dd:hh:mm:ss",
-    startTime: "$dys:$hys:$mys:$sys",
-    digitWidth: 53,
-    digitHeight: 77,
-    timerEnd: function() { alert("Sorry but this offer has just expired!"); window.location='$link'; },
-    image: "wp-content/plugins/$pluginName/digits.png"
-  });
+  jQuery("#counter").countDown({targetOffset: {'day':$dys,'month':0,'year':0,'hour':$hys,'min':$mys,'sec':$sys},onComplete:function(){window.location="$link"; }});
   });
   
   
