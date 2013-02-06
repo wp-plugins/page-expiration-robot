@@ -1,10 +1,10 @@
 ﻿=== Page Expiration Robot ===
 Contributors: John Socratous
 Tags: expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, internet marketing
-Version: 1.2.4
+Version: 1.2.5
 Requires at least: 2.8
-Tested up to: 3.3.2
-Stable tag: 1.24
+Tested up to: 3.5.1
+Stable tag: 1.25
 License: GPLv2 or later
 
 Expire posts or pages on a visitor-by-visitor basis after a specified amount of time, redirect them to any URL and start increasing your conversions!
@@ -52,6 +52,9 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 2) Fixed Scheduling for All Visitors: You can specify when a page will stop being available for all visitors and where to send people who try to access it after that date and time. For example, you can send visitors who arrive at the page prior to the launch to a page showing a countdown to the launch. Once the launch has ended, visitors can be sent to a page with a waiting list form or different offer.
 
 == Changelog ==
+
+= 1.2.5 =
+Compatibility with Wordpress 3.5.1
 
 = 1.2.4 =
 Ability to auto-redirect to URL upon expiration
