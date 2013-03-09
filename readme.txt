@@ -1,17 +1,17 @@
 ﻿=== Page Expiration Robot ===
 Contributors: John Socratous
-Tags: expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, internet marketing
+Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, internet marketing
 Version: 1.2.5
 Requires at least: 2.8
 Tested up to: 3.5.1
 Stable tag: 1.25
 License: GPLv2 or later
 
-Expire posts or pages on a visitor-by-visitor basis after a specified amount of time, redirect them to any URL and start increasing your conversions!
+The official #1 most powerful, scarcity plugin ever created for WordPress to create evergreen scarcity-based campaigns to expire posts AND pages on a visitor-by-visitor to increase your conversions!
 
 == Description ==
 
-This free internet marketing plugin is for people who wants to setup one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. Optionally, you can add an attention-grabbing countdown timer that will show visitors every second they’re losing by not taking action immediately! 
+Double (even TRIPLE!) your conversions by setting up timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. Optionally, you can add an attention-grabbing countdown timer that will show visitors every second they’re losing by not taking action immediately! 
 
 Here are just few of the amazing features:
 
