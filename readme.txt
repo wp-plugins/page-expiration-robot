@@ -7,11 +7,11 @@ Tested up to: 3.5.1
 Stable tag: 1.25
 License: GPLv2 or later
 
-The official #1 most powerful, scarcity free plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
+The official #1 most powerful, scarcity free plugin ever created for WordPress to create evergreen campaigns to expire posts and pages.
 
 == Description ==
 
-Double (even TRIPLE!) your conversions by setting up timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. Optionally, you can add an attention-grabbing countdown timer that will show visitors every second they’re losing by not taking action immediately! 
+Double (even TRIPLE!) your conversions by setting up scarcity-based timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. Optionally, you can add an attention-grabbing countdown timer that will show visitors every second they’re losing by not taking action immediately! 
 
 Here are just few of the amazing features:
 
