@@ -7,7 +7,7 @@ Tested up to: 3.5.1
 Stable tag: 1.25
 License: GPLv2 or later
 
-The official #1 most powerful, scarcity plugin ever created for WordPress to create evergreen scarcity-based campaigns to expire posts AND pages on a visitor-by-visitor to increase your conversions!
+The official #1 most powerful, scarcity free plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
 
 == Description ==
 
