@@ -8,7 +8,7 @@ Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
 Author: Internet Marketing Wizard
 Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.26
+Version: 1.27
 License: GPLv2 or later
 
 */
@@ -197,7 +197,7 @@ else
 	}
 ?>
  <script type="text/javascript" src="<?php echo $pluginpath; ?>js/jquery-ui-sliderAccess.js"></script>
- <script type="text/javascript" src="<?php echo $pluginpath; ?>js/jquery-ui-timepicker-addon.js"></script>
+ <script type="text/javascript" src="<?php echo $pluginpath; ?>js/jquery-ui-cog-timepicker-addon.js"></script>
  <link rel="stylesheet" type="text/css" href="<?php echo $pluginpath; ?>style/jquery-ui-1.css">
 		<script type='text/javascript'>
 		function numeric_entry(e)
@@ -229,7 +229,7 @@ else
 				jQuery(document).ready(function(){
 					
 					//COG IT TEAM FOR DATE AND TIME
-		jQuery('#expiry_date_time').datetimepicker({
+		jQuery('#expiry_date_time').cogdatetimepicker({
 			showOn: "button",
    		buttonImage: "<?php echo $pluginpath; ?>images/datetime.png",
    		buttonImageOnly: true,
@@ -240,7 +240,7 @@ else
 			timeFormat: 'hh:mm:ss'
 		});
    
-      jQuery('#expiry_date_time1').datetimepicker({
+      jQuery('#expiry_date_time1').cogdatetimepicker({
 			showOn: "button",
    		buttonImage: "<?php echo $pluginpath; ?>images/datetime.png",
    		buttonImageOnly: true,
