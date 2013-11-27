@@ -6,9 +6,9 @@
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: Page Expiration Robot is a free plugin for internet marketers who want to setup one-time offers and schedule their pages and posts to expire after certain amount of time to create real urgency to visitors!
-Author: Internet Marketing Wizard
-Author URI: http://www.InternetMarketingWizard.com/
-Version: 1.27
+Author: IMW Enterprises
+Author URI: http://www.imwenterprises.com/
+Version: 1.28
 License: GPLv2 or later
 
 */
@@ -67,8 +67,7 @@ DUN;
 $wpdb->query($qry);
 $wpdb->query($qry2);
 
-	$query3="ALTER TABLE wp_page_expiry_info ADD blog_id BIGINT NOT NULL";
-	$wpdb->query($query3);
+
 function my_create_post_meta_box() {
 	add_meta_box( 'my-meta-box', 'Page Expiration Robot', 'my_post_meta_box', 'post', 'normal', 'high' );
 	add_meta_box( 'my-meta-box', 'Page Expiration Robot', 'my_post_meta_box', 'page', 'normal', 'high' );
@@ -89,6 +88,10 @@ $method_0="";
 $method_1="";
 $method_2="";
 $event_0="";
+$expiry_date_time_days = "";
+$expiry_date_time_hrs = "";
+$expiry_date_time_mins = "";
+$expiry_date_time_secs = "";
 $id=$post->ID;
 global $wpdb;
 global $blog_id;
@@ -101,15 +104,18 @@ if((isset($res['redirection_url'])) && (strlen($res['redirection_url']) >= 1)){
 $link=$res['redirection_url'];
 }
  $activation=" checked='true' ";
- 
+ $methodvalue = 1;
  if($res['method']==0){
- $method_0=" checked='true' ";
+	 $method_0=" checked='true' ";
+	 $methodvalue = 0;
  }
  if($res['method']==1){
- $method_1=" checked='true' ";
+	 $method_1=" checked='true' ";
+	 $methodvalue = 1;
  }
  if($res['method']==2){
- $method_2=" checked='true' ";
+	 $method_2=" checked='true' ";
+	 $methodvalue = 2;
  }
  $expiry_method = "";
  if($res['expiry_time']==0){
@@ -150,28 +156,28 @@ $exptime = $days."-".$hours."-".$minutes."-".$seconds;
 /* By COG IT >> */
 
 if($days<1){
-$default_day="";
+	$expiry_date_time_days = $default_day="";
 }
 else{
-$default_day=$days;
+  $expiry_date_time_days = $default_day=$days;
 }
 if($hours<1){
-$default_hour="";
+	$expiry_date_time_hrs = $default_hour="0";
 }
 else{
-$default_hour=$hours;
+	$expiry_date_time_hrs = $default_hour=$hours;
 }
 if($minutes<1){
-$default_minute="";
+	$expiry_date_time_mins = $default_minute="0";
 }
 else{
-$default_minute=$minutes;
+	$expiry_date_time_mins = $default_minute=$minutes;
 }
 if($seconds<1){
-$default_second="";
+	$expiry_date_time_secs = $default_second="0";
 }
 else{
-$default_second=$seconds;
+	$expiry_date_time_secs = $default_second=$seconds;
 }
 }
 }
@@ -240,7 +246,7 @@ else
 			timeFormat: 'hh:mm:ss'
 		});
    
-      jQuery('#expiry_date_time1').cogdatetimepicker({
+      /*jQuery('#expiry_date_time1').cogdatetimepicker({
 			showOn: "button",
    		buttonImage: "<?php echo $pluginpath; ?>images/datetime.png",
    		buttonImageOnly: true,
@@ -258,7 +264,7 @@ else
 			millisecMax: 59,
 			dateFormat: 'mm/dd/yy',
 			timeFormat: 'hh:mm:ss:l'
-		});
+		});*/
 					
 					
 					});
@@ -337,7 +343,51 @@ jQuery("#expiry_date_time").change(function(){
 	});*/
 		
 	});
-
+function setExpirtyDateTime()
+{
+	var days = jQuery("#expiry_date_time_days").val();
+	var hrs = jQuery("#expiry_date_time_hrs").val();
+	var mins = jQuery("#expiry_date_time_mins").val();
+	var secs = jQuery("#expiry_date_time_secs").val();
+	if (days.length == 1)
+	{
+		days = "0"+days;
+	}
+	else if (days.length == 0)
+	{
+		days = "00";
+	}
+	if (hrs.length == 1)
+	{
+		hrs = "0"+hrs;
+	}
+	else if (hrs.length == 0)
+	{
+		hrs = "00";
+	}
+	if (mins.length == 1)
+	{
+		mins = "0"+mins;
+	}
+	else if (mins.length == 0)
+	{
+		mins = "00";
+	}
+	if (secs.length == 1)
+	{
+		secs = "0"+secs;
+	}
+	else if (secs.length == 0)
+	{
+		secs = "00";
+	}
+	jQuery("#expiry_date_time1").val(days+":"+hrs+":"+mins+":"+secs);
+	checkDefaultPeriod();
+	jQuery("#expiry_hour").val(hrs);
+	jQuery("#expiry_minute").val(mins);
+	jQuery("#expiry_second").val(secs);	
+	jQuery("#expiry_day").val(days);
+}
 function dateDiff(currentdate,dates) {
 date1 = new Date();
 date2 = new Date();
@@ -450,7 +500,9 @@ jQuery(document).ready(function(){
 		<input type='radio' name='expiry_method' value='2' id='expiry_method_period' <?php echo $expiry_method_2; ?> />
 		</td>
 		<td colspan="2">
-		A Specific TIME&nbsp; <input type="text" name="expiry_date_time1"  id="expiry_date_time1" value="<?php echo $expiry_period; ?>" onchange="checkDefaultPeriod();"/>
+		A Specific TIME&nbsp; <select name="expiry_date_time_days" id="expiry_date_time_days" onchange="setExpirtyDateTime();"><option value="">Days</option><?php for($i=0;$i<31;$i++){if($expiry_date_time_days != "" && $expiry_date_time_days == $i){$selected = "selected";}else{$selected = "";} echo '<option value="'.$i.'" '.$selected.'>'.(strlen($i)==1?"0".$i:$i).' Days</option>';}?></select>&nbsp;<select name="expiry_date_time_hrs" id="expiry_date_time_hrs" onchange="setExpirtyDateTime();"><option value="">Hrs</option><?php for($i=0;$i<24;$i++){if($expiry_date_time_hrs != "" && $expiry_date_time_hrs == $i){$selected = "selected";}else{$selected = "";}echo '<option value="'.$i.'" '.$selected.'>'.(strlen($i)==1?"0".$i:$i).' Hrs</option>';}?></select>&nbsp;<select name="expiry_date_time_mins" id="expiry_date_time_mins" onchange="setExpirtyDateTime();"><option value="">Mins</option><?php for($i=0;$i<60;$i++){if($expiry_date_time_mins != "" && $expiry_date_time_mins == $i){$selected = "selected";}else{$selected = "";} echo '<option value="'.$i.'" '.$selected.'>'.(strlen($i)==1?"0".$i:$i).' Mins</option>';}?></select>&nbsp;<select name="expiry_date_time_secs" id="expiry_date_time_secs" onchange="setExpirtyDateTime();"><option value="">Secs</option><?php for($i=0;$i<60;$i++){if($expiry_date_time_secs != "" && $expiry_date_time_secs == $i){$selected = "selected";}else{$selected = "";} echo '<option value="'.$i.'" '.$selected.'>'.(strlen($i)==1?"0".$i:$i).' Secs</option>';}?></select>&nbsp;
+		
+		<input type="hidden" name="expiry_date_time1"  id="expiry_date_time1" value="<?php echo $expiry_period; ?>" onchange="checkDefaultPeriod();"/>
 			
 		</td>
 		</tr>
@@ -470,7 +522,7 @@ jQuery(document).ready(function(){
 		</tr></table><Br />
 		<Table border='0'><tr><td>
 		<label for="method">Expire visitors by: </label></td><td><input type='radio' class='method' readonly="readonly" name='method' value='0' <?php echo $method_0; ?> />&nbsp;<label for="method" selected>IP</label>&nbsp;&nbsp;<input type='radio' class='method' name='method' value='1' <?php echo $method_1; ?>  />&nbsp;<label for="method">Cookie</label>&nbsp;&nbsp;<input type='radio' class='method' name='method' value='2' <?php echo $method_2; ?>  />&nbsp;<label for="method">Fixed for all</label>
-		<input type="hidden" id="methodvalue" name="method" value="1">
+		<input type="hidden" id="methodvalue" name="method" value="<?php echo $methodvalue;?>">
 		</td></tr></table>
 		<Table border='0'><tr><td>
 		<label for="event">Event On Finish: </label></td><td valign="top"><div style="margin-top:9px;">&nbsp;<input type='checkbox' name='event' id="redirect_auto" value='0' <?php echo $event_0; ?> />&nbsp;<label for="event" selected>Redirect automatically</label></div></td></tr>
