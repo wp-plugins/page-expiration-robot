@@ -1,9 +1,9 @@
 ﻿=== Page Expiration Robot ===
-Contributors: John Socratous
+Contributors: socratous139
 Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, internet marketing
 Version: 1.2.8
 Requires at least: 2.8
-Tested up to: 3.7.1
+Tested up to: 3.8
 Stable tag: 1.28
 License: GPLv2 or later
 
