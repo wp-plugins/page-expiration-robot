@@ -49,7 +49,7 @@ Want to see more?
 
 * [Unlimited Campaigns](http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns "Unlimited scarciy countdown timers").
 * [View More Countdown Styles](http://www.pageexpirationrobot.com/v2/add-ons/countdown-style-designs "Countdown styles and templates for Page Expiration Robot plugin").
-* [Show Timer As Sticky on Footer & Footer](http://www.pageexpirationrobot.com/v2/add-ons/countdown-sticky-bar "Countdown timer on header or footer").
+* [Show Timer As Sticky on Footer](http://www.pageexpirationrobot.com/v2/add-ons/countdown-sticky-bar "Countdown timer on header or footer").
 
 Plus it's easy to extend it with even more features. Page Expiration Robot allows you to quickly and easily integrate with a variety of money-sucking features and provides for even deeper integration with WordPress through our (http://www.pageexpirationrobot.com/v2/download/add-ons "collection of optional Add-Ons").
 
