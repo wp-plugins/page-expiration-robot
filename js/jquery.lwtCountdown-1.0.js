@@ -192,6 +192,8 @@
 
 		hours = Math.floor(diffSecs/60/60)%24;
 
+//alert(secs);
+
 		if ($.data($this[0], 'omitWeeks') == true)
 
 		{
@@ -211,7 +213,7 @@
 			weeks = Math.floor(diffSecs/60/60/24/7);
 
 		}
-
+		days = Math.floor(diffSecs/60/60/24); // remove this if above if condition works
 		$this.dashChangeTo(id, 'seconds_dash', secs, duration ? duration : 800);
 
 		$this.dashChangeTo(id, 'minutes_dash', mins, duration ? duration : 1200);

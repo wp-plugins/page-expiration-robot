@@ -1,47 +1,74 @@
-Ôªø=== Page Expiration Robot - Scarcity Countdown Timer ===
-Contributors: socratous139
-Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, internet marketing, count down, countdown clock, countdown generator, countdown ticker, countdown till days, countdown widget, countup, days since, days till, flash countdown, ticker, timer 
-Version: 1.2.8
-Requires at least: 2.8
-Tested up to: 3.8
-Stable tag: 1.28
+=== Page Expiration Robot ===
+Contributors: John Socratous
+Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, internet marketing
+Version: 3.0
+Requires at least: 3.8
+Tested up to: 4.0
+Stable tag: 3.00
 License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-The official #1 most powerful, scarcity free plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
+The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
 
 == Description ==
 
-Double (even TRIPLE!) your conversions by setting up timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. Optionally, you can add an attention-grabbing countdown timer that will show visitors every second they‚Äôre losing by not taking action immediately! 
+Double (even TRIPLE!) your conversions by setting up countdown timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. You can add an attention-grabbing live countdown timer that will show visitors every second theyíre losing by not taking action immediately! 
+
+[vimeo http://vimeo.com/108896854]
+
+We do everything every other ìbasic-gradeî countdown WordPress plugin out there does (plus more) and giving it away to you to for free so you can use it to multiply your sales, conversions,
+and profits by 2x, 3x, even 4x, in a matter of minutes!
+
+= Evegreen Scarcity: Automate your offers to run (and expire) all day, every day, 24/7/365! =
+
+Create evergreen product launches and hypnotize each and every visitor with their very own expiring countdown making them to literally beg YOU to stop the timer immediately and buy your stuff! Create non-stop profit countdown timers that run (and expires) all day, every day, completely on autopilot. Show your visitors every second theyíre losing by not acting or purchasing your product right away!
+
+= Event-based Scarcity: Schedule expiration on specific date & time or period. =
+
+Want to run offers and set them to be expired on a specific date? You bet! Just specify the date when the page should stop being available for ALL your visitors and it will be expired automatically. Works perfectly well if you want to run event-based promotions around specific calendar dates like Christmas, Valentines Day, and Easter, pumping massive spikes of cash into your bank account almost every month of the year.
+
+= OTO Scarcity: Create Irrestible ONE-TIME-ONLY Offers in 60 Seconds (Or Less!) =
+
+Setup one time offers and make visitors rush to find their credit card so they can buy your stuff . Each of your visitors has to take action right now, or your ìexclusiveî deal will move to the next person and wonít be available to him.
+
+= Plus Even More Awesome Features: =
 
 Here are just few of the amazing features:
 
-1. Turn WP pages (or posts) into one-time offers
-2. Schedule expiration on specific date, time or period
-3. Redirect expired visitors to a different URL/offer
-4. Add LIVE attention-grabbing countdown timer (optional)
-4. Create perpetual expirations for automation
-5. Set visitors to expire either by IP or Cookie
-6. Set fixed-time expiration for all visitors
-7. Plugin works with both WP Pages and Blog Posts.
+1. Integrated with beautiful live countdown timer design(s).
+2. Automatically redirect expired visitors to any URL.
+3. Show special messages and images upon expiration.
+3. A selection of 400+ timezones.
+4. Set visitors to expire by Cookie.
+5. 100% Mobile-Friendly & Responsive countdowns.
+5. Plugin works with both WP Pages and Blog Posts.
+
+Want to see more?
+
+= Premium Extensions =
+
+* [Unlimited Campaigns](http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns "Unlimited scarciy countdown timers").
+* [View More Countdown Styles](http://www.pageexpirationrobot.com/v2/add-ons/countdown-style-designs "Countdown styles and templates for Page Expiration Robot plugin").
+* [Show Timer As Sticky on Header/Footer](http://www.pageexpirationrobot.com/v2/add-ons/countdown-sticky-bar/"Countdown timer on header or footer").
+
+Plus it's easy to extend it with even more features. Page Expiration Robot allows you to quickly and easily integrate with a variety of money-sucking features and provides for even deeper integration with WordPress through our (http://www.pageexpirationrobot.com/v2/download/add-ons/ "collection of optional Add-Ons").
+
 
 == Installation ==
 
 1. Upload the `page-expiration-robot` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-4. Create New Post or Page and you‚Äôll see the options below HTML Editor 
+4. Create New Post or Page and youíll see the options below HTML Editor 
 
 
 == Frequently Asked Questions ==
 
-= Where are the options of Page Expiration Robot? =
-
-Create New Post or Page and you‚Äôll see the options below HTML Editor 
 
 = What's the difference between Time-Limited and One-Time Offers? =
 
-Time-Limited Offers: Set your visitors access to expire after certain amount of time and redirect them to a different URL with a higher price, different offer or even a ‚Äúsold out‚Äù page . You can set their access to expire after days, hours, minutes or  seconds. Works for both WP posts and pages.
+Time-Limited Offers: Set your visitors access to expire after certain amount of time and redirect them to a different URL with a higher price, different offer or even a ìsold outî page . You can set their access to expire after days, hours, minutes or  seconds. Works for both WP posts and pages.
 
-One-Time Offers: One-time-offers are a method for increasing sales by offering visitors only one chance to buy a product (or to buy it at the current low price), or lose out. If they leave the page or refresh their browser, they never see the offer again and if they attempt to return they are redirected to an ‚Äòoffer declined‚Äô page that you specify.
+One-Time Offers: One-time-offers are a method for increasing sales by offering visitors only one chance to buy a product (or to buy it at the current low price), or lose out. If they leave the page or refresh their browser, they never see the offer again and if they attempt to return they are redirected to an ëoffer declinedí page that you specify.
 
 = How visitors gets expired?
 
@@ -52,6 +79,78 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 2) Fixed Scheduling for All Visitors: You can specify when a page will stop being available for all visitors and where to send people who try to access it after that date and time. For example, you can send visitors who arrive at the page prior to the launch to a page showing a countdown to the launch. Once the launch has ended, visitors can be sent to a page with a waiting list form or different offer.
 
 == Changelog ==
+
+= 3.0.0 - 14/10/2014 (MAJOR UPDATE) =
+
+* Tweak - Completely new user-interface
+* Feature - You can add a LIVE countdown timer to your WP posts/pages. Fully flexible, resizable and mobile-friendly & responsive.
+* Feature - Resize countdown timer
+* Feature - Set alignment position
+* Feature - Hide countdown labels
+* Feature - Rename countdown labels
+* Feature - A selection of 400+ timezones 
+* Feature - Show special message upon expiration.
+* Fix - 100+ hours of bug testing and fixes spent.
+
+= 1.2.7 =
+The Shortcode popup alignment is fixed
+
+= 1.2.7 =
+Changed the CORE options for Default and user provided image
+
+= 1.2.7 =
+Fixed the URL text toggle options
+
+= 1.2.7 =
+Fixed the Banner Related Problems
+
+= 1.2.7 =
+Fixed the Error Banner showing and Update issue
+
+= 1.2.7 =
+Fixed the splash image replace section
+
+= 1.2.7 =
+Fixed the Overlay option of the Number of Actions Addon
+
+= 1.2.7 =
+Fixed the Position if selected Header or Footer
+
+= 1.2.7 =
+Fixed the Add on install sections
+
+= 1.2.7 =
+Fixed the Save as Draft Functionality
+
+= 1.2.7 =
+Fixed the Save as Draft Functionality
+
+= 1.2.7 =
+Fixed the Style for Save as Draft
+
+= 1.2.7 =
+Fixed the Individual Addon Choose File options
+
+= 1.2.7 =
+Fixed the Folder permission of the Addons folder
+
+= 1.2.7 =
+Fixed the CSS for the Counter Preview
+
+= 1.2.7 =
+Added the tooltip to the Action buttons in Campaign
+
+= 1.2.7 =
+Updated Main CSS to align the checkboxes
+
+= 1.2.7 =
+Updated The Pointer with new Form code
+
+= 1.2.7 =
+Addons Directory issue is solved
+
+= 1.2.7 =
+Compatible with new Add ons
 
 = 1.2.5 =
 Compatibility with Wordpress 3.5.1
@@ -88,4 +187,5 @@ plugin name spelling mistake fixed.
 Initial release
 
 == Screenshots ==
-2. Screenshot of Page Expiration Robot options.
+1. Page Expiration Robot options overview.
+2. Evergreen scarcity options.

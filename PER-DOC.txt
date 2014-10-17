@@ -1,0 +1,26 @@
+Main FIle : per.php
+Addons.php=>load addons list.
+Action Reach :return Html to show text message.
+time content: shortcode return content between [PERCONTENTS] and [/PERCONTENTS] enclosed with div with unique id ,
+and when counter expires return js code to show content between shortcode.
+counter-position:add fix css to counter div to show it in header and footer.
+counter with text:Apend or prepend new html depending on condition left/right.
+Expire by Ip : return time remaining.
+Stay on same page : Change jquery function call after counter expire.
+reset_expiry_time_for_all : if true it clears cookies or update database before claculating time.
+reset_expiry_time_specific_user :if true it clears cookies or update database if remaining time is 0.
+Save as draft /:if true then after counter expires using  ajax request convert post status from publish to draft.
+
+
+PER STAND ALONE Changes:
+=>add files define.php and wp-db.php
+=>add file index.php to set campaign settings page.
+=>add include folder which contain new header.footer,and style.css
+=>replace add_shortcode to add_filter('percounteriframe', array($this,'set_contdown'),10,3);
+=>remove register post type 
+=>campaign_edit_form.php : replace code for query_post.
+=>set_countdown change parameters
+=>add extra  parameters for cookie return jscode
+
+Addons:
+time content: need to remove add_shortcode function need to add another functionality.
