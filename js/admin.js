@@ -137,7 +137,8 @@ PER.resetCampaignForm = function ()
 	jQuery(".sub-wrapper").hide();
 
 	jQuery("#redirection_url_wrap").show();
-
+	
+    jQuery('#shw_imgg').attr("checked","checked");
 	
 
 	jQuery("#color_num_black").attr("checked","checked");

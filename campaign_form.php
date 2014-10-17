@@ -10,7 +10,7 @@
 		{
 		?>
     <h3 class="bottom_message">Oops! You have exceeded the number of campaigns allowed for this version. <br/>
-      Please <a href="http://www.pageexpirationrobot.com/addons/unlimited">click here</a> to unlock the "Unlimited Campaigns" add-on!.</h3>
+      Please <a href="http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns">click here</a> to unlock the "Unlimited Campaigns" add-on!.</h3>
     <?php 
 		}
 		?>
@@ -359,7 +359,7 @@
 					{
 					?>
         <h3 class="bottom_message">Oops! You have exceeded the number of campaigns allowed for this version.<br/>
-          Please <a href="http://www.pageexpirationrobot.com/addons/unlimited">click here</a> to unlock the "Unlimited Campaigns" add-on!.</h3>
+          Please <a href="http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns">click here</a> to unlock the "Unlimited Campaigns" add-on!.</h3>
         <?php
 					}
 					else
@@ -476,7 +476,20 @@ if(style_count>0)
 	 }
 }, 100);
 
-	 
+	setInterval(function() {
+    console.log('fired11');
+      if((jQuery('#shw_imgg').is(':checked')) || (jQuery('#event_show_own_image').is(':checked')) || (jQuery('#event_default_image').is(':checked')))
+   {
+    
+    jQuery('.revisit').show().css('display','block');
+   }else
+   {
+    
+    jQuery('.revisit').hide()
+                  .css('display','none');
+   }
+}, 100);   
+
 		
 	});
 
