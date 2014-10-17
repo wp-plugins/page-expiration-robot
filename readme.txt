@@ -12,16 +12,16 @@ The official #1 most powerful, scarcity free countdown plugin ever created for W
 
 == Description ==
 
-Double (even TRIPLE!) your conversions by setting up countdown timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. You can add an attention-grabbing live countdown timer that will show visitors every second they’re losing by not taking action immediately! 
+Double (even TRIPLE!) your conversions by setting up countdown timed-offers, one time offers and schedule pages and posts to expire (on visitor-by-visitor basis) and redirect expired visitors to a different offer or URL. You can add an attention-grabbing live countdown timer that will show visitors every second they are losing by not taking action immediately! 
 
 [vimeo http://vimeo.com/108896854]
 
-We do everything every other “basic-grade” countdown WordPress plugin out there does (plus more) and giving it away to you to for free so you can use it to multiply your sales, conversions,
+We do everything every other basic-grade countdown WordPress plugin out there does (plus more) and giving it away to you to for free so you can use it to multiply your sales, conversions,
 and profits by 2x, 3x, even 4x, in a matter of minutes!
 
 = Evegreen Scarcity: Automate your offers to run (and expire) all day, every day, 24/7/365! =
 
-Create evergreen product launches and hypnotize each and every visitor with their very own expiring countdown making them to literally beg YOU to stop the timer immediately and buy your stuff! Create non-stop profit countdown timers that run (and expires) all day, every day, completely on autopilot. Show your visitors every second they’re losing by not acting or purchasing your product right away!
+Create evergreen product launches and hypnotize each and every visitor with their very own expiring countdown making them to literally beg YOU to stop the timer immediately and buy your stuff! Create non-stop profit countdown timers that run (and expires) all day, every day, completely on autopilot. Show your visitors every second they are losing by not acting or purchasing your product right away!
 
 = Event-based Scarcity: Schedule expiration on specific date & time or period. =
 
@@ -29,7 +29,7 @@ Want to run offers and set them to be expired on a specific date? You bet! Just 
 
 = OTO Scarcity: Create Irrestible ONE-TIME-ONLY Offers in 60 Seconds (Or Less!) =
 
-Setup one time offers and make visitors rush to find their credit card so they can buy your stuff . Each of your visitors has to take action right now, or your “exclusive” deal will move to the next person and won’t be available to him.
+Setup one time offers and make visitors rush to find their credit card so they can buy your stuff . Each of your visitors has to take action right now, or your exclusive deal will move to the next person and wont be available to him.
 
 = Plus Even More Awesome Features: =
 
@@ -49,9 +49,9 @@ Want to see more?
 
 * [Unlimited Campaigns](http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns "Unlimited scarciy countdown timers").
 * [View More Countdown Styles](http://www.pageexpirationrobot.com/v2/add-ons/countdown-style-designs "Countdown styles and templates for Page Expiration Robot plugin").
-* [Show Timer As Sticky on Header/Footer](http://www.pageexpirationrobot.com/v2/add-ons/countdown-sticky-bar/"Countdown timer on header or footer").
+* [Show Timer As Sticky on Header & Footer] (http://www.pageexpirationrobot.com/v2/add-ons/countdown-sticky-bar "Countdown timer on header or footer").
 
-Plus it's easy to extend it with even more features. Page Expiration Robot allows you to quickly and easily integrate with a variety of money-sucking features and provides for even deeper integration with WordPress through our (http://www.pageexpirationrobot.com/v2/download/add-ons/ "collection of optional Add-Ons").
+Plus it's easy to extend it with even more features. Page Expiration Robot allows you to quickly and easily integrate with a variety of money-sucking features and provides for even deeper integration with WordPress through our (http://www.pageexpirationrobot.com/v2/download/add-ons "collection of optional Add-Ons").
 
 
 == Installation ==
