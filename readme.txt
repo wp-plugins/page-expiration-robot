@@ -60,7 +60,7 @@ Plus it's easy to extend it with even more features. Page Expiration Robot allow
 
 1. Upload the `page-expiration-robot` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-4. Create New Post or Page and you’ll see the options below HTML Editor 
+4. Go to Page Expiration Robot --> Add New Campaign
 
 
 == Frequently Asked Questions ==
