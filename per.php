@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.0
+Version: 3.0.1
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -1142,9 +1142,9 @@ if(!isset($PER)){
             /* Add the main siteadmin menu item */
                 $wp_admin_bar->add_menu( array(
                     'id'     => 'per-upgrade-bar',
-                    'href' => 'http://www.pageexpirationrobot.com/special-offer',
+                    'href' => 'http://www.pageexpirationrobot.com/v2/special',
                     'parent' => 'top-secondary',
-					'title' => __('<img src="'.plugins_url( 'page-expiration-robot/images/download.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Upgrade Now!" title="Upgrade Now!" /><strong><b>Premium Features</b><strong>', 'per' ),
+					'title' => __('<img src="'.plugins_url( 'page-expiration-robot.3.0.0/images/download.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Upgrade Now!" title="Upgrade Now!" /><strong><b>Premium Features</b><strong>', 'per' ),
                     'meta'   => array('class' => 'per-upgrade-to-pro', 'target' => '_blank' ),
                 ) );
 		}

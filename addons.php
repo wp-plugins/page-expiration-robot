@@ -217,11 +217,14 @@ if (isset($_GET['act']))
 
 	//$addOns = $dom->getElementsByTagName("addon");
 
-	$json = file_get_contents('http://pageexpirationrobot.com/v2/latest_addons.php');
-	$obj = json_decode($json);
+	//$json = file_get_contents('http://pageexpirationrobot.com/v2/latest_addons.php',true);
+        $raw_addons = wp_remote_get( 'http://pageexpirationrobot.com/v2/latest_addons.php' );
+       
+        
+        $chr = $raw_addons['body'];
+        $obj = json_decode($chr);
 
-	//print_r($obj);
-	$addOns = $obj;
+        $addOns = $obj;
 ?>
 
 <div class="per-wrapper wrap per_addon_manager per_addon_manager_addons_wrap pageExp">
