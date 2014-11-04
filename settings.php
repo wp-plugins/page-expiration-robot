@@ -1,3 +1,11 @@
+<?php
+  if(isset($_POST['chk_opt']))
+  {
+  	  $chk_val = $_POST['promotional_check'];
+  	  update_option('per__promotional_check',$chk_val);
+  	  header('Location:'.trailingslashit(site_url()).'wp-admin/admin.php?page=page_expiration_robot_settings');
+  }
+?>
 <div id="wrapper">
 	<div class="wrap ar_wrap">
 		<div id='icon-options-general' class='icon32'><br />
@@ -50,6 +58,87 @@
 			</div>
 		</div> -->
 	</div>
+	 <?php
+      $serialized = get_option('per__addons');
+      $flag = 0;
+      if($serialized != '')
+      {
+		       $arr = unserialize($serialized);
+		      
+		      /*echo '<pre>';
+		      print_r($arr);*/
+		      
+		      foreach($arr as $a)
+		      {
+		          $stat = $a['install'];
+		          if($stat == 1)
+		          {
+		             $flag = 1;
+		             break;
+		          }
+
+		      }
+     }  
+      if($flag == 1)
+      {
+    ?>
+	<div id="poststuff">
+		<div class="postbox">
+			<div class="handlediv" title="Click to toggle"><br></div>
+			<h3 class="hndle"><?php _e('Promotional Settings', "per"); ?></h3>
+			<div class="inside">
+			<form id="whitelist" class="chk_form" name="whitelist" method="post" action=''>
+			 <?php
+                $val = get_option('per__promotional_check');
+			 ?>
+			 <input type='checkbox' name='promotional_check' value='1' 
+             <?php
+                if($val == 1)
+                	echo 'checked';
+             ?>
+			 /> Disable Promotional content from top <input type="submit" value="Save Changes" class="button-primary"><input type='hidden' name='chk_opt' value='1' />
+			</form>
+			<div class="listed_ips">
+			<?php
+			$listedips = unserialize(get_option("per_white_list"));
+			if (is_array($listedips))
+			{
+				foreach($listedips as $ip)
+				{
+					$sip = str_replace(".","",$ip);
+					echo "<a href='#' class='listed_ip' id='white".$sip."'>".$ip."</a>";
+				}
+			}
+			?>
+			</div>
+			</div>
+		</div>
+		<!-- <div class="postbox">
+			<div class="handlediv" title="Click to toggle"><br></div>
+			<h3 class="hndle"><?php _e('Black Listed IP Addresses', "per"); ?></h3>
+			<div class="inside">
+			<form id="blacklist" class="ip_form" name="black_list" method="post">
+			Black list IP: <input type="text" name="ip" class="list_input">&nbsp;<input type="submit" value="Black List" class="button-primary"><input type="hidden" name="list" value="black"><img src="<?php echo $pluginpath;?>images/loading.gif" class="loading">
+			</form>
+			<div class="listed_ips">
+			<?php
+			$listedips = unserialize(get_option("per_black_list"));
+			if (is_array($listedips))
+			{
+				foreach($listedips as $ip)
+				{
+					$sip = str_replace(".","",$ip);
+					echo "<a href='#' class='listed_ip' id='black".$sip."'>".$ip."</a>";
+				}
+			}
+			?>
+			</div>
+			</div>
+		</div> -->
+	</div>
+	<?php
+      }
+	?>
 </div>
 <script language="javascript">
 	jQuery('.ip_form').submit(function() { // catch the form's submit event

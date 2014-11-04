@@ -53,6 +53,7 @@ if (isset($_GET['act']))
 				/*delete add on folder */
 
 				$this->rrmdir($this->PluginDir."/".$this->AddOnFolder."/".$addon);
+				@unlink($this->UploadAddonPath."/".$addon.'.zip');
 
 			}
 
@@ -69,7 +70,8 @@ if (isset($_GET['act']))
 				$name = $_FILES["addon"]["name"];
 
 				move_uploaded_file($tmp_name, $this->PluginDir."/".$this->AddOnFolder."/".$name);
-
+                copy($this->PluginDir."/".$this->AddOnFolder."/".$name,$this->UploadAddonPath."/".$name);
+               
 				$this->unzip($name, $this->PluginDir."/".$this->AddOnFolder);
 
 				@unlink($this->PluginDir."/".$this->AddOnFolder."/".$name);
@@ -122,6 +124,7 @@ if (isset($_GET['act']))
 				$name = $_FILES["addon"]["name"];
 
 				move_uploaded_file($tmp_name, $this->PluginDir."/".$this->AddOnFolder."/".$name);
+                copy($this->PluginDir."/".$this->AddOnFolder."/".$name,$this->UploadAddonPath."/".$name);
 
 				$this->unzip($name, $this->PluginDir."/".$this->AddOnFolder);
 

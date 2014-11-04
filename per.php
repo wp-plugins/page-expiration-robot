@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.2
+Version: 3.0.3
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -66,6 +66,7 @@ if(!class_exists('PageExpirationRobot'))
 		static $PluginName;
 		static $PluginDir;
 		static $PluginURL;
+		static $UploadAddonPath;
 		static $Namespace = "page_expiration_robot";
 		static $CampaignPostType = "per_campaign";
 		static $MetaPrefix = "per_";
@@ -94,12 +95,91 @@ if(!class_exists('PageExpirationRobot'))
 			$this->DBTableIP = $wpdb->prefix."page_expiry_ip";
 			PageExpirationRobot::$DefaultCOunter=get_option($this->MetaPrefix."_default_counter");
 
+            ///// Upload folder related customization starts from Here ///////
+
+            $per_upload_dir = wp_upload_dir(); 
+            $per_addon_main_path = $per_upload_dir['basedir'];
+            $total_addons_path = $per_addon_main_path.'/'.'per_addons';
+            $this->UploadAddonPath = $total_addons_path;
+            if(!is_dir($total_addons_path))
+            {
+            	mkdir($total_addons_path, 0777);
+            }
+            else
+            {
+            	
+            	if($this->checkFolderIsEmptyOrNot($total_addons_path))  // check if uploads folder not empty
+            	{            	
+            	    if(!$this->checkFolderIsEmptyOrNot($this->PluginDir."/".$this->AddOnFolder))
+            	    {
+		            	    $this->recurs_copy($total_addons_path,$this->PluginDir."/".$this->AddOnFolder); // Copy all the Addons from temporary cache to Addons folder
+			                if ( $handle = opendir ( $this->PluginDir."/".$this->AddOnFolder ) ) 
+			                   {
+						        while ( false !== ( $file = readdir ( $handle ) ) ) {
+						            if ( $file != "." && $file != ".." ) {
+						                $files [] = $file;
+						            }
+						        }
+						        closedir ( $handle );
+						       }
+						    foreach($files as $f) 
+						    {  
+									$this->unzip($f, $this->PluginDir."/".$this->AddOnFolder);
+
+						            @unlink($this->PluginDir."/".$this->AddOnFolder."/".$f);
+                                    
+                                    $addOnSplitter = explode('.',$f);
+					                $addonMainname = $addOnSplitter[0];
+
+					                $this->InstalledAddOns[$addonMainname]['install'] = 1;
+
+									$this->InstalledAddOns[$addonMainname]['act'] = 1;
+                            }
+							update_option($this->MetaPrefix."_addons", serialize($this->InstalledAddOns));
+                    
+                    }
+                }
+            }
+
+            ///// Upload folder related customization ends at Here ///////
+
 			// Hooks
 			add_action('admin_menu', array($this,'admin_menu'));
 			add_shortcode($this->ShortCode,array($this,"set_contdown"));		
 			add_action('init', array($this,'init'));
 			$this->loadAddOns();
 
+		}
+
+		function recurs_copy($src,$dst) 
+        {
+			    $dir = opendir($src);
+			    
+			    while(false !== ( $file = readdir($dir)) ) {
+			        if (( $file != '.' ) && ( $file != '..' )) {
+			            if ( is_dir($src . '/' . $file) ) {
+			                $this->recurse_copy($src . '/' . $file,$dst . '/' . $file);
+			            }
+			            else {
+			                copy($src . '/' . $file,$dst . '/' . $file);
+			            }
+			        }
+			    }
+			    closedir($dir);
+	    }
+
+        function checkFolderIsEmptyOrNot ( $folderName )
+        {
+			    $files = array ();
+			    if ( $handle = opendir ( $folderName ) ) {
+			        while ( false !== ( $file = readdir ( $handle ) ) ) {
+			            if ( $file != "." && $file != ".." ) {
+			                $files [] = $file;
+			            }
+			        }
+			        closedir ( $handle );
+			    }
+			    return ( count ( $files ) > 0 ) ?  TRUE: FALSE;
 		}
 		
 		function loadAddOns()
@@ -1017,12 +1097,12 @@ if(!class_exists('PageExpirationRobot'))
           
             $html.=apply_filters('per_get_counter',$DefaultCounter,$day,$hrs,$mins,$secs,$link,$image,$cssClass,$alignCss,$display_counter,$sizeClass,$info,$campaign_id);
 
-            $qry="SELECT * FROM {$wpdb->prefix}page_expiry_action_reach WHERE P_Id=$campaign_id  LIMIT 1";			
+            /*$qry="SELECT * FROM {$wpdb->prefix}page_expiry_action_reach WHERE P_Id=$campaign_id  LIMIT 1";			
 			$actioninfo = $wpdb->get_row($qry, ARRAY_A);
 			$balnce_reach = $actioninfo['balance_reach'];
 			$balnce_reach++;
 			$upd_ssql="UPDATE {$wpdb->prefix}page_expiry_action_reach SET balance_reach = $balnce_reach WHERE P_Id=".$campaign_id." AND balance_reach > 0";							
-			$wpdb->query($upd_ssql);
+			$wpdb->query($upd_ssql);*/
 
 		} 
 			$counter_expire=$this->after_counter_expire($link,$info,$campaign_id);
@@ -1135,7 +1215,9 @@ if(!isset($PER)){
 }
 
 
-
+$promotional_settings = get_option('per__promotional_check');
+if($promotional_settings == '')
+{
 
 
 	function per_admin_bar_menu(){
@@ -1153,7 +1235,7 @@ if(!isset($PER)){
 		}
 
 add_action( 'admin_bar_menu','per_admin_bar_menu', 1000);
-
+}
 //////***** Adding Custom Pointer *****///////
 add_action('init','pointer_code');
 function pointer_code()
