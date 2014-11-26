@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.3
+Version: 3.0.4
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -1039,7 +1039,12 @@ if(!class_exists('PageExpirationRobot'))
 			
 			//echo $nextdate;
 			$nextdate= date('Y/m/d G:i:s',$nextdate);
-			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='float:".$alignCss.";margin:auto;' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
+            $styler = "";
+			if($info['position'] == 'invisible')
+              $styler = "display:none;";
+
+
+			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='float:".$alignCss.";margin:auto;".$styler."' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
 			$html.="<script>jQuery.noConflict();
 				jQuery(window).load(function(){
 					
@@ -1109,7 +1114,7 @@ if(!class_exists('PageExpirationRobot'))
 
 			$html.=apply_filters('per_get_expiry_action',$counter_expire,$day,$hrs,$mins,$secs,$campaign_id);
 
-			$html.="</div></div></div><div><div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div></div>";
+			$html.="<div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div>";  // 20.11.2014 from this line two </div> were removed at the begining of $html .= and two at the end, because on optimize press wp theme it closed wrapper and container div tag before it ends and messed whole page IK
 			$html=apply_filters('per_counter_html',$html,$day,$hrs,$mins,$secs,$campaign_id,$info);
 
 			return $html;
