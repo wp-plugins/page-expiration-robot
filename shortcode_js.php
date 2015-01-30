@@ -3,7 +3,7 @@ require_once('../../../wp-load.php');
 require_once('../../../wp-admin/includes/admin.php');
 
 do_action('admin_init');
-$form='<div id="per_editor-form"><table id="per_editor-table" class="form-table"><div class="per-wrapper"><div class="header"><div class="logo"><img src="'.WP_PLUGIN_URL.'/page-expiration-robot/images/PER_logo.png" style="height:34px;"></div><h2>Add Shortcode</h2></div><table style="width: 520px;" cellspacing="2" cellpadding="0">';
+$form='<div id="per_editor-form"><table id="per_editor-table" class="form-table"><div class="per-wrapper"><div class="header"><div class="logo"><img src="'.WP_PLUGIN_URL.'/page-expiration-robot.3.0.6/images/PER_logo.png" style="height:34px;"></div><h2>Add Shortcode</h2></div><table style="width: 520px;" cellspacing="2" cellpadding="0">';
 $form.='<tr style="height:20px;" class="" id="camp_row'.get_the_ID().'"><td style="width:5px;"><select id="counter_selector" style="float: left;">';
 $args = array(
 			  'post_type'	  => 'per_campaign'	

@@ -221,7 +221,7 @@ PER.checkRequiredCampaignData = function()
 
 	}
 
-	if (jQuery(".event:checked").val() == "2" && jQuery.trim(jQuery("#splash_url").val()) == "")
+	if ((jQuery("#event_show_own_image").prop("checked") == true) && jQuery.trim(jQuery("#splash_url").val()) == "")
 
 	{
 
@@ -351,8 +351,12 @@ PER.OnCustomChange = function (str,flag,id)
 
 }
 
-
-
+setInterval(function(){ var vl = jQuery('#expiry_method').val();
+		if(vl == '2')
+		{
+			jQuery('#save_as_draft_offer .expiry_method').show();
+			jQuery('#event_save_as_draft').parent().show();
+		} }, 100);
 jQuery(document).ready(function(){
 
 	PER.CustomFile();
@@ -890,6 +894,3 @@ function removejscssfile(filename, filetype){
  }
 
 }
-
-
-

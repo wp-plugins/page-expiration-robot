@@ -892,10 +892,8 @@
 }
 
 #counter_customization.fixed{
-	position: fixed;
 	width: 41.5%;
-	top: 30px;
-	right: 20px;
+	
 }
 
 .per-upgrade-to-pro a{
@@ -1126,3 +1124,11 @@
 	bottom: -7px;
 	z-index: 9999;
 }
+
+.timerBox{width:auto;}
+.per_counter_wrapper{ height: auto;}
+.per_counter_wrapper .group {vertical-align: top;}
+#countdown_dashboard_1 {display: block;float: left;height: 100%;margin: 0 auto; max-width: 422px !important;
+min-height: 100px;overflow: scroll;padding-top: 30px; text-align: left;width: 100% !important;}
+.labelnew{font-size:14px; text-shadow:none !important; margin-top:-3px !important;}
+.entry-content #countdown_dashboard_1{overflow:visible;}

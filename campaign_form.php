@@ -1,3 +1,26 @@
+<?php
+if ( current_user_can( 'manage_options' ) ) {
+    ?>
+    <script>(function() { 
+var _fbq = window._fbq || (window._fbq = []); 
+if (!_fbq.loaded) { 
+var fbds = document.createElement('script'); 
+fbds.async = true; 
+fbds.src = '//connect.facebook.net/en_US/fbds.js'; 
+var s = document.getElementsByTagName('script')[0]; 
+s.parentNode.insertBefore(fbds, s); 
+_fbq.loaded = true; 
+} 
+_fbq.push(['addPixelId', '695751367199747']); 
+})(); 
+window._fbq = window._fbq || []; 
+window._fbq.push(['track', 'PixelInitialized', {}]); 
+</script> 
+<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=695751367199747&amp;ev=PixelInitialized" /></noscript>
+
+    <?php
+} 
+?>
 <div class="per-wrapper pageExp">
   <div class="header">
     <div class="logo"><img src="<?php echo $this->PluginURL;?>/images/PER_logo.png" ></div>
@@ -6,29 +29,34 @@
       Campaign</h2>
     <a href="?page=page_expiration_robot_new" class="add-new-h2">Add New</a>
     <?php
-		if (!$AllowAdd && (!isset($editCampaign) || $editCampaign != 1))
-		{
-		?>
+    if (!$AllowAdd && (!isset($editCampaign) || $editCampaign != 1))
+    {
+    ?>
     <h3 class="bottom_message">Oops! You have exceeded the number of campaigns allowed for this version. <br/>
       Please <a href="http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns">click here</a> to unlock the "Unlimited Campaigns" add-on!.</h3>
     <?php 
-		}
-		?>
+    }
+    ?>
     <?php
         if(isset($_GET['pid']))
         {
-
+            
         ?>
+            
+
     <button class="per-green-button" onclick="jQuery('#btn_save').click();" >
     <?php if (isset($_GET['pid']) && $_GET['pid'] > 0)
-		{echo "Update";}else echo "Create";?>
+    {echo "Update";}else echo "Create";?>
     </button>
     <?php
-		}
+    }
         ?>
   </div>
   <?php if (isset ($_GET['message'])){
-	echo '<div id="message" class="updated below-h2"><p>Campaign published. </p></div>';
+  echo '<div id="message" class="updated below-h2"><p>Campaign published. </p></div>';
+} ?>
+<?php if (isset ($_GET['updated'])){
+  echo '<div id="message" class="updated below-h2"><p>Campaign updated. </p></div>';
 } ?>
   <div class="clearfix"></div>
   <div class="wrapper">
@@ -56,14 +84,14 @@
               <input type="text" name="expiry_date" id="expiry_date" readonly class="midwidth" placeholder="Select Date">
               <select name="time_zone" id="time_zone" class="midwidth rightmarNo">
                 <?php global $timeZones;
-							foreach ($timeZones as $timeZone=>$city)
-							{
-								$selected = "";
-								if ($timeZone == $selected_timezone)
-									$selected = " selected ";
-								echo "<option value='".$timeZone."'".$selected.">".$city."</option>";
-							}
-							?>
+              foreach ($timeZones as $timeZone=>$city)
+              {
+                $selected = "";
+                if ($timeZone == $selected_timezone)
+                  $selected = " selected ";
+                echo "<option value='".$timeZone."'".$selected.">".$city."</option>";
+              }
+              ?>
               </select>
             </div>
             <div id="expiry_time_wrap" class="sub-wrapper expiry_method expiry_method_2 <?php echo apply_filters('per_print_expiry_time_select_css_class','');?>">
@@ -113,7 +141,7 @@
               <input type="text" name="redirection_url" id="redirection_url" class="medium_input">
               <br clear="all" />
             </div>
-            <input type="radio" name="event" id="shw_imgg" value="1" class="event">
+            <input type="radio" name="eventf" id="shw_imgg" value="1" class="event">
             <label>Show image and redirect when re-visiting</label>
             <br clear="all" />
             <div class="revisit" style="padding-left:20px;display:none;">
@@ -186,65 +214,55 @@
         <!--Box For Counter customization -->
         <div class="step-box">
           <div class="headPart">
-          	<h3>Counter Customization </h3>
+            <h3>Counter Customization </h3>
           </div>
           <div class="row">
             <?php 
-						$id="";
-						if (!isset($_GET['pid'])){
-							$days_label = "DAYS";
-							$hours_label = "HOURS";
-							$min_label = "MINUTES";
-							$sec_label = "SECONDS";
-							$label_color = "#000";
-							$shadow_color = "#fff";
-							$myhexcode ="#fff";	
-							$myhexcode1="#000";
-						} 
-						?>
+            $id="";
+            if (!isset($_GET['pid'])){
+              $days_label = "DAYS";
+              $hours_label = "HOURS";
+              $min_label = "MINUTES";
+              $sec_label = "SECONDS";
+              $label_color = "#000";
+              $shadow_color = "#fff";
+              $myhexcode ="#fff"; 
+              $myhexcode1="#000";
+            } 
+            ?>
             <table id="counter_customization" width="100%">
               <tr>
                 <td style="width:56%;" valign="top">
-                	<table border='0' id="tablecolor" width="100%">
+                  <table border='0' id="tablecolor" width="100%">
                     <tr>
-                      <td colspan="3">Color of numbers</td>
+                      <td colspan="3"></td>
                     </tr>
                     <tr>
-                      <td >&nbsp;
-                        <input type='radio' class="notfirst" name='color_num' value='0' id="color_num_black"/>
-                        &nbsp;
-                        <label for="Black">White</label></td>
-                      <td ><input type='radio' class="notfirst" name='color_num'  id='color_num_custom' value='1'   />
-                        &nbsp;
-                        <label for="Custom">Custom</label></td>
-                      <td><input type="text" id="myhexcode" name="myhexcode" data-hex="true" value="<?php echo str_replace("0x","#",$myhexcode);?>" class="color notfirst" style="width: 60px; color: black;" onclick="PER.OnCustomChange(this.value,'textcolor','myhexcode');jQuery('#color_num_custom').attr('checked','true');"></td>
+                      <td ></td>
+                      <td ></td>
+                      <td></td>
                     </tr>
                     <tr>
-                      <td colspan="3">Background Color</td>
+                      <td colspan="3"></td>
                     </tr>
                     <tr>
-                      <td>&nbsp;
-                        <input type='radio' class="notfirst" name='back_color' value='0' id="back_color_black"/>
-                        &nbsp;
-                        <label for="White">Black</label></td>
-                      <td ><input type='radio' class="notfirst" name='back_color' id='back_color_custom' value='1' />
-                        &nbsp;
-                        <label for="Custom">Custom</label></td>
-                      <td ><input type="text" id="myhexcode1" name="myhexcode1" data-hex="true" value="<?php echo str_replace("0x","#",$myhexcode1);?>" class="color notfirst" style="width: 60px; color: black;" onclick="PER.OnCustomChange(this.value,'bgcolor','myhexcode1');jQuery('#back_color_custom').attr('checked','true');"></td>
+                      <td></td>
+                      <td ></td>
+                      <td ></td>
                     </tr>
                     <tr>
                       <td></td>
                     </tr>
                     <tr>
                       <td colspan="2" valign="top">
-                      	<h3>Counter Size</h3>
-                      	<div id="slider-range-min"></div>
+                        <h3>Counter Size</h3>
+                        <div id="slider-range-min"></div>
                         <input type='text' class="notfirst notaction" name='counter_size' id='counter_size' readonly  /> px
                       </td>
                       <td colspan="1" valign="top" >
-                      	<h3>Alignment</h3>
+                        <h3>Alignment</h3>
                       <select name="alignment" id="alignment"  class="fullwidth">
-                        	<option value="0" id="left_align">Left</option>
+                          <option value="0" id="left_align">Left</option>
                           <option value="1" id="centered_align"  >Centered</option>
                           <option value="2" id="right_align">Right</option>
                       </select>
@@ -278,15 +296,15 @@
                         <input type='text' name='days_label' id='daylabel' value='<?php echo $days_label;?>' style="width:70%;" class="notfirst notaction" />
                       </td>
                       <td width="25%">
-                      	<input type='checkbox'class="notfirst notaction"  name='hid_label[hide_hrs_label]' id="hide_hrs_label" value='1' />
+                        <input type='checkbox'class="notfirst notaction"  name='hid_label[hide_hrs_label]' id="hide_hrs_label" value='1' />
                         <input type='text' name='hours_label' id="hourslabel" value='<?php echo $hours_label;?>' style="width:70%;" class="notfirst notaction" />
                       </td>
                       <td width="25%">
-                      	<input type='checkbox' class="notfirst notaction" name='hid_label[hide_mins_label]' id="hide_mins_label" value='1'/>
+                        <input type='checkbox' class="notfirst notaction" name='hid_label[hide_mins_label]' id="hide_mins_label" value='1'/>
                         <input type='text' name='min_label' id='minlabel' value='<?php echo $min_label;?>' style="width:70%;" class="notfirst notaction" />
                       </td>
                       <td width="25%">
-                      	<input type='checkbox' class="notfirst notaction" name='hid_label[hide_sec_label]' id="hide_sec_label"  value='1'/>
+                        <input type='checkbox' class="notfirst notaction" name='hid_label[hide_sec_label]' id="hide_sec_label"  value='1'/>
                         <input type='text' name='sec_label' id="seclabel" value='<?php echo $sec_label;?>' style="width:70%;" class="notfirst notaction" />
                       </td>
                     </tr>
@@ -306,18 +324,18 @@
                  </td>
               </tr>
               <tr>
-              	<td>
-                	<h3>Style</h3>
+                <td>
+                  <h3>Style</h3>
                     <div class="row" ID="counter_cust_style">
-            			<div class="clock_time_offer"> Need more countdown styles? <a href="<?php echo trailingslashit(site_url())?>wp-admin/admin.php?page=page_expiration_robot_addons">Click here</a></div>
-						<?php do_action('print_counter_style_options');?>
+                  <div class="clock_time_offer"> Need more countdown styles? <a href="<?php echo trailingslashit(site_url())?>wp-admin/admin.php?page=page_expiration_robot_addons">Click here</a></div>
+            <?php do_action('print_counter_style_options');?>
                   </div>
                 </td>
               </tr>
               <tr>
-              	<td style="padding-top:15px;">
-                	<h3>Counter preview</h3>
-                	<!-- counter Start -->
+                <td style="padding-top:15px;">
+                  <h3>Counter preview</h3>
+                  <!-- counter Start -->
                     <div class="per_counter_wrapper">
                       <div id="countdown_dashboard_1" style="margin:0px auto; width:502px;display:block; height:255px; text-align:left;float:none;" class="counter_medium">
                         <div style="margin:0px auto;float:none;width:300px;" class="main_counter_wrap"> 
@@ -355,23 +373,23 @@
       </div>
       <div class="row bottomPart">
         <?php
-					if (!$AllowAdd && (!isset($editCampaign) || $editCampaign != 1))
-					{
-					?>
+          if (!$AllowAdd && (!isset($editCampaign) || $editCampaign != 1))
+          {
+          ?>
         <h3 class="bottom_message">Oops! You have exceeded the number of campaigns allowed for this version.<br/>
           Please <a href="http://www.pageexpirationrobot.com/v2/add-ons/unlimited-campaigns">click here</a> to unlock the "Unlimited Campaigns" add-on!.</h3>
         <?php
-					}
-					else
-					{
-					?>
+          }
+          else
+          {
+          ?>
         <button class="per-green-button" id="btn_save">
         <?php if (isset($_GET['pid']) && $_GET['pid'] > 0)
-			{echo "Update";}else echo "Create";?>
+      {echo "Update";}else echo "Create";?>
         </button>
         <?php
-					}
-					?>
+          }
+          ?>
       </div>
       <div class="clearfix"></div>
     </form>
@@ -395,7 +413,7 @@ $( "#counter_size" ).val( $( "#slider-range-min" ).slider( "value" ) );
 
 
 jQuery(window).load(function(){
-	setTimeout(function () { get_flip_style();}, 500);
+  setTimeout(function () { get_flip_style();}, 500);
 });
 
 jQuery(document).ready(function(){
@@ -403,81 +421,109 @@ jQuery(document).ready(function(){
 var style_count =jQuery('#counter_cust_style input[type=radio]').length;
 if(style_count>0)
 {
-	jQuery('.clock_time_offer').remove();
+  jQuery('.clock_time_offer').remove();
 }
 
-	jQuery('#expiry_method').on('change',function(){
+  jQuery('#expiry_method').on('change',function(){
 
-		if(jQuery(this).val()=='3_0ffer')
-		{
-			//alert(jQuery(this).val());
-			jQuery('.expiry_method').hide();
-			jQuery('.expiry_method_offer_custom_messege').remove();
-			var html ='<div class="expiry_method_offer_custom_messege"><span style="color:red;">Oops! you do not have access to this feature </span> <a href="http://www.pageexpirationrobot.com/addons/action_reach" > Click to unlock this add-on! </a> </div>'
-			jQuery(this).after(html);
-		}
+    if(jQuery(this).val()=='3_0ffer')
+    {
+      //alert(jQuery(this).val());
+      jQuery('.expiry_method').hide();
+      jQuery('.expiry_method_offer_custom_messege').remove();
+      var html ='<div class="expiry_method_offer_custom_messege"><span style="color:red;">Oops! you do not have access to this feature </span> <a href="http://www.pageexpirationrobot.com/addons/action_reach" > Click to unlock this add-on! </a> </div>'
+      jQuery(this).after(html);
+    }
     else if(jQuery(this).val()=='3'){
         console.log('Action Reacher');
         jQuery('.paddLeft .row').eq(0).addClass('noOfAction');
     }
     else
-		{
+    {
       jQuery('.paddLeft .row').removeClass('noOfAction');
-			jQuery('.expiry_method_offer_custom_messege').remove();
-		}
+      jQuery('.expiry_method_offer_custom_messege').remove();
+    }
 
 
-	});
+  });
 
-	jQuery('#event_expiry_options input[type=radio]').each(function(){
-
-
+  jQuery('#event_expiry_options input[type=radio]').each(function(){
 
 
-			jQuery(this).on('click',function(){
 
-				if(jQuery(this).attr('id')=='event_redirect')
-				{
-					jQuery('#redirection_url_wrap').show()
-													.css('display','block');
-				}else
-				{
-					jQuery('#redirection_url_wrap').hide()
-									.css('display','none');
-				}
-				
-			});
+
+      jQuery(this).on('click',function(){
+
+        if(jQuery(this).attr('id')=='event_redirect')
+        {
+          jQuery('#redirection_url_wrap').show()
+                          .css('display','block');
+        }else
+        {
+          jQuery('#redirection_url_wrap').hide()
+                  .css('display','none');
+        }
+        
+      });
 
       jQuery(this).on('click',function(){
         console.log(jQuery(this).attr('id'));
+        if(jQuery(this).attr('id')=='shw_imgg')
+        {
+            jQuery('#event_default_image').attr('checked','checked');
+        }
         if((jQuery(this).attr('id')=='shw_imgg') || (jQuery(this).attr('id')=='event_show_own_image') || (jQuery(this).attr('id')=='event_default_image'))
         {
           jQuery('.revisit').show();
         }else
         {
+          jQuery('#shw_imgg').removeAttr('checked');
           jQuery('.revisit').hide();
         }
         
       });
-					
-	});
+          
+  });
 
-	setInterval(function() {
-		console.log('fired');
+        jQuery("#shw_imgg").click(function(){
+          jQuery('#event_expiry_options input[type=radio]').each(function(){
+              if((jQuery(this).attr('id') != 'event_default_image') && (jQuery(this).attr('id') != 'event_show_own_image') && (jQuery(this).attr('id') != 'shw_imgg'))
+              {
+                  jQuery(this).removeAttr('checked');
+              }
+
+           })
+      })
+
+
+
+
+  setInterval(function() {
+    //console.log('fired');
       if(jQuery('#event_redirect').is(':checked'))
-	 {
-	 	
-	 	jQuery('#redirection_url_wrap').show().css('display','block');
-	 }else
-	 {
-	 	
-	 	jQuery('#redirection_url_wrap').hide()
-									.css('display','none');
-	 }
+   {
+    
+    jQuery('#redirection_url_wrap').show().css('display','block');
+   }else
+   {
+    
+    jQuery('#redirection_url_wrap').hide()
+                  .css('display','none');
+   }
 }, 100);
 
-	setInterval(function() {
-    console.log('fired11');
+
+  setInterval(function() {
+    if((jQuery("#event_show_own_image").prop("checked")) || (jQuery("#event_default_image").prop("checked")))
+                  {
+                      jQuery("#shw_imgg").attr("checked","checked");
+                  }
+}, 100);
+
+
+
+  setInterval(function() {
+    //console.log('fired11');
       if((jQuery('#shw_imgg').is(':checked')) || (jQuery('#event_show_own_image').is(':checked')) || (jQuery('#event_default_image').is(':checked')))
    {
     
@@ -490,8 +536,8 @@ if(style_count>0)
    }
 }, 100);   
 
-		
-	});
+    
+  });
 
 
 jQuery(document).ready(function($) {

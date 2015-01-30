@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.5
+Version: 3.0.6
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -656,7 +656,20 @@ if(!class_exists('PageExpirationRobot'))
 			$html="<script language='javascript' type='text/javascript'>function showExpireAction".$campaign_id."(counter){";
 			/*Apply Filter to get new event settings from addon */
 			$html.=apply_filters('per_print_counter_finish_js','',PageExpirationRobot::$NoOfShortcode,$campaign_id);
-			if ($link!="" && $info['event']==0){$html.= 'window.location="'.$link.'";';}
+			if($info['expiry_method'] != 1)
+			{
+			if ($link!="" && $info['event']==0){
+				 $html.= 'window.location="'.$link.'";';
+		}
+	}
+	  if($info['expiry_method'] == 1)
+	  {
+	  	  if($_COOKIE['campaign_id'] == $campaign_id)
+			{
+                //echo "sessioned";
+                $html.= 'window.location="'.$link.'";'; 
+			}
+	  }
 			if ($info['event']!=""){
 				if($info['expiry_method'] != 3)
 				{
@@ -672,14 +685,7 @@ if(!class_exists('PageExpirationRobot'))
 			}
 			$events = $info['event'];
 			$expiry_method = $info['expiry_method'];
-			if($expiry_method != 3)
-			{
-					if(($events == 1) || ($events == 2))
-					{
-						$_SESSION['id_sett'] = $campaign_id;
-					    $_SESSION['redirect_m_url'] = $info['redirect_m_url'];
-					}
-            }
+			
 			return $html;
 		}		
 		/* function to display  Short code i.e countdown */			
@@ -785,6 +791,11 @@ if(!class_exists('PageExpirationRobot'))
 						$display_counter= false;
 						$onetime_html=$this->expire_by_cookie($campaign_id,"onetime",$info);
 						$onetime_html=apply_filters('per_expire_visiters_addon',$onetime_html,$campaign_id,"onetime",$info);
+						?>
+                        <script type="text/javascript">
+                          document.cookie="campaign_id=<?php echo $campaign_id; ?>;"
+                        </script>
+						<?php
 						echo $onetime_html;
 						add_filter('per_get_counter', array($this,'get_counter_style_none'), 20, 13);
 					break;
@@ -806,24 +817,90 @@ if(!class_exists('PageExpirationRobot'))
 						$counterHtml="";
 					break;
 					case 1:/* if event is Show Default image */
+					    if(($info['position'] == 'h') || ($info['position'] == 'f'))
+					    {
+					    	$image=$this->PluginURL."/images/expired-notice.png";
+					    	$counterHtml = "<script type='text/javascript'>
+                           function new_imager(per_id){
+                             jQuery('.per_'+per_id).hide();
+                             jQuery('#countdown_dashboard_1').hide();
+                             console.log('Test banner');
+                             jQuery('#hid').html(\"<img src='".$image."'>\");
+                             jQuery.ajax({
+			      type: 'POST',
+			      url: '".trailingslashit(admin_url())."admin-ajax.php',
+			      data: { action:'sess_set',campid:per_id,exp:".$info['expiry_method'].",url:'".$info['redirect_m_url']."' }
+			    })
+			      .done(function( msg ) {
+			        console.log( 'Test from sess' );
+			        
+			      });  
+                           }
+						</script>";
+					    }
+					    else
+					    {
 						$counterHtml = "<script type='text/javascript'>
                            function new_imager(per_id){
                              jQuery('.per_'+per_id).hide();
                              jQuery('#countdown_dashboard_1').hide();
+                             jQuery.ajax({
+			      type: 'POST',
+			      url: '".trailingslashit(admin_url())."admin-ajax.php',
+			      data: { action:'sess_set',campid:per_id,exp:".$info['expiry_method'].",url:'".$info['redirect_m_url']."' }
+			    })
+			      .done(function( msg ) {
+			        console.log( 'Test from sess'+msg );
+			        
+			      });  
                            }
 						</script>";
 						$image=$this->PluginURL."/images/expired-notice.png";
 						$counterHtml .= "<img src='".$image."'>";
+					  }
 					break;
 					case 2:		/* if event is Show Own Image */
+					    if(($info['position'] == 'h') || ($info['position'] == 'f'))
+					    {
+					    	$image=$this->PluginURL."/images/".$info['splash_url'];
+					    	$counterHtml = "<script type='text/javascript'>
+                           function new_imager(per_id){
+                             jQuery('.per_'+per_id).hide();
+                             jQuery('#countdown_dashboard_1').hide();
+                             console.log('Test banner');
+                             jQuery('#hid').html(\"<img width='100' height='50' src='".$image."'>\");
+                             jQuery.ajax({
+			      type: 'POST',
+			      url: '".trailingslashit(admin_url())."admin-ajax.php',
+			      data: { action:'sess_set',campid:per_id,exp:".$info['expiry_method'].",url:'".$info['redirect_m_url']."' }
+			    })
+			      .done(function( msg ) {
+			        console.log( 'Test from sess' );
+			        
+			      }); 
+                           }
+						</script>";
+					    }
+					    else
+					    {
 					    $counterHtml = "<script type='text/javascript'>
                            function new_imager(per_id){
                              jQuery('.per_'+per_id).hide();
                              jQuery('#countdown_dashboard_1').hide();
+                             jQuery.ajax({
+			      type: 'POST',
+			      url: '".trailingslashit(admin_url())."admin-ajax.php',
+			      data: { action:'sess_set',campid:per_id,exp:".$info['expiry_method'].",url:'".$info['redirect_m_url']."' }
+			    })
+			      .done(function( msg ) {
+			        console.log( 'Test from sess' );
+			        
+			      }); 
                            }
 						</script>";
 						$image=$this->PluginURL."/images/".$info['splash_url'];
 						$counterHtml .= "<img src='".$image."'>";
+					   }
 					break;
 
 					case 4:	global $post;	/* if event is Show Own Image */
@@ -862,7 +939,7 @@ if(!class_exists('PageExpirationRobot'))
 				$link=apply_filters('get_redirect_link',$link,$campaign_id);
 
 				if($day <= 0 && $hrs<=0 && $mins<=0 && $secs<=0 && $link !="" ){
-						$onexpirejscode='<script type="text/javascript">window.location="'.$link.'";</script>';
+						//$onexpirejscode='<script type="text/javascript">window.location="'.$link.'";</script>';
 				}
 				$onexpirejscode=apply_filters('per_onexpirejscode',$onexpirejscode,$campaign_id,$link);
 				echo $onexpirejscode;
@@ -1068,7 +1145,7 @@ if(!class_exists('PageExpirationRobot'))
 					reflection:false,
 					reflectionOpacity:10,
 					reflectionBlur:0,
-					dayTextNumber:2,
+					dayTextNumber:3,
 					displayDay:days_label,
 					displayHour:hours_label,
 					displayMinute:min_label,
@@ -1114,7 +1191,7 @@ if(!class_exists('PageExpirationRobot'))
 
 			$html.=apply_filters('per_get_expiry_action',$counter_expire,$day,$hrs,$mins,$secs,$campaign_id);
 
-			$html.="</div></div></div><div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div>";  // 20.11.2014 from this line two </div> were removed at the begining of $html .= and two at the end, because on optimize press wp theme it closed wrapper and container div tag before it ends and messed whole page IK
+			$html.="<div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div>";  // 20.11.2014 from this line two </div> were removed at the begining of $html .= and two at the end, because on optimize press wp theme it closed wrapper and container div tag before it ends and messed whole page IK
 			$html=apply_filters('per_counter_html',$html,$day,$hrs,$mins,$secs,$campaign_id,$info);
 
 			return $html;
@@ -1234,7 +1311,7 @@ if($promotional_settings == '')
                     'id'     => 'per-upgrade-bar',
                     'href' => 'http://www.pageexpirationrobot.com/v2/special',
                     'parent' => 'top-secondary',
-					'title' => __('<img src="'.plugin_dir_url( __FILE__ ).'images/download.png" style="vertical-align:middle;margin-right:5px" alt="Upgrade Now!" title="Upgrade Now!" /><strong><b>Premium Features</b><strong>', 'per' ),
+					'title' => __('<img src="'.plugin_dir_url( __FILE__ ).'images/PER_logo.png"  style="vertical-align:middle;margin-right:5px;width:113px;height:24px;" alt="Upgrade Now!" title="Upgrade Now!" /><strong><b>Premium Features</b><strong>', 'per' ),
                     'meta'   => array('class' => 'per-upgrade-to-pro', 'target' => '_blank' ),
                 ) );
 		}
@@ -1248,6 +1325,26 @@ function pointer_code()
      include("pointer.php");
      if(!session_start())
      	session_start();
+}
+
+add_action('wp_ajax_sess_set','sess_set');
+add_action('wp_ajax_nopriv_sess_set','sess_set');
+
+function sess_set()
+{
+   $expiry_method = $_POST['exp'];
+   $campaign_id = $_POST['campid'];
+   $url = $_POST['url'];
+   if(($expiry_method != 3) && ($expiry_method != 1))
+			{
+					
+						$_SESSION['id_sett'] = $campaign_id;
+					    $_SESSION['redirect_m_url'] = $url;
+				
+            }
+
+
+   die();
 }
 
 ?>

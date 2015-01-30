@@ -99,7 +99,7 @@ function flip_counter(id,sizeClass,cssClass,myhexcode,myhexcode1,daylabel,hoursl
 			reflection:false,
 			reflectionOpacity:10,
 			reflectionBlur:0,
-			dayTextNumber:2,
+			dayTextNumber:3,
 			displayDay:days_label,
 			displayHour:hours_label,
 			displayMinute:min_label,
