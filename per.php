@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.6
+Version: 3.0.7
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -318,7 +318,7 @@ if(!class_exists('PageExpirationRobot'))
 			add_submenu_page($this->Namespace, __( 'Add New Campaign', $this->Namespace ), __( 'Add New Campaign', $this->Namespace ), 'edit_others_posts', $this->Namespace."_new", array($this,'new_campaign'));
 			add_submenu_page($this->Namespace, __( 'Browse Add ons', $this->Namespace ), __( 'Browse Add ons', $this->Namespace ), 'edit_others_posts', $this->Namespace."_addons", array($this,'add_ons'));
 			add_submenu_page($this->Namespace, __( 'Settings', $this->Namespace ), __( 'Settings', $this->Namespace ), 'edit_others_posts', $this->Namespace."_settings", array($this,'settings')); 
-			add_submenu_page($this->Namespace, __( 'Help', $this->Namespace ), __( 'Help', $this->Namespace ), 'edit_others_posts', $this->Namespace."_help", array($this,'help_func')); 
+			add_submenu_page($this->Namespace, __( 'Help/Support', $this->Namespace ), __( 'Help', $this->Namespace ), 'edit_others_posts', $this->Namespace."_help", array($this,'help_func')); 
 			add_action('admin_print_scripts', array($this, 'admin_scripts'));
 		}
 		/* Add Stylesheet and js file in front view */
@@ -595,6 +595,10 @@ if(!class_exists('PageExpirationRobot'))
 			wp_redirect( "?page=page_expiration_robot&pid=".$campaign_id."&message=6", 301 );
 			 exit;
 			}
+			if (isset ($_GET['pid'])){
+			wp_redirect( "?page=page_expiration_robot&pid=".$campaign_id."&updated=1", 301 );
+			 exit;
+			}	
 						
 		}
 		/* function to show blank counter if method is one time expire*/
@@ -664,11 +668,25 @@ if(!class_exists('PageExpirationRobot'))
 	}
 	  if($info['expiry_method'] == 1)
 	  {
+	  	  $method = $info['method'];
+	  	  if($method == 'ip')
+	  	  {
+              $ip = $_SERVER['REMOTE_ADDR'];
+              $ip_chk = get_post_meta($campaign_id,'first_visit_ip',true);
+              $ip_arr = explode(',',$ip_chk);
+              if(in_array($ip,$ip_arr))
+              {
+              	  $html.= 'window.location="'.$link.'";'; 
+              }
+	  	  }
+	  	  else
+	  	  	  {
 	  	  if($_COOKIE['campaign_id'] == $campaign_id)
 			{
                 //echo "sessioned";
                 $html.= 'window.location="'.$link.'";'; 
 			}
+		}
 	  }
 			if ($info['event']!=""){
 				if($info['expiry_method'] != 3)
@@ -676,8 +694,12 @@ if(!class_exists('PageExpirationRobot'))
 				   $html.= "jQuery('#complete_info_message_'+counter).slideDown();";
 			    }
 			}
-			$html.="new_imager(".$campaign_id.");}</script>";
-            if(isset($_SESSION['id_sett']) && $_SESSION['id_sett'] == $campaign_id)
+			if(($info['event'] != 3) && ($info['event'] != 5))
+			{
+      			$html.="new_imager(".$campaign_id.");";
+            }
+			$html.= "}</script>";
+            if(isset($_SESSION['id_sett']) && $_SESSON['id_sett'] == $campaign_id)
 			{
 				
                 $html .= '<script type="text/javascript">window.location="'.$_SESSION['redirect_m_url'].'";</script>';
@@ -790,12 +812,31 @@ if(!class_exists('PageExpirationRobot'))
 					case 1:	/* For first time visit */
 						$display_counter= false;
 						$onetime_html=$this->expire_by_cookie($campaign_id,"onetime",$info);
-						$onetime_html=apply_filters('per_expire_visiters_addon',$onetime_html,$campaign_id,"onetime",$info);
+						$onetime_html=apply_filters('per_expire_visiters_addon',$onetime_html,$campaign_id,"onetime",$info);						
+						if($info['method'] == 'ip')
+						{
 						?>
+                        <script type="text/javascript">
+						jQuery.ajax({
+						      type: 'POST',
+						      url: '<?php echo trailingslashit(admin_url()); ?>admin-ajax.php',
+						      data: { action:'firstvisit',campid:<?php echo $campaign_id; ?>}
+						    })
+						      .done(function( msg ) {
+						        console.log( 'Test from IP First' );
+						        
+						      });  
+                        </script>
+                        <?php
+                         }
+                         else
+                         	 {
+                        ?>
                         <script type="text/javascript">
                           document.cookie="campaign_id=<?php echo $campaign_id; ?>;"
                         </script>
 						<?php
+						     }
 						echo $onetime_html;
 						add_filter('per_get_counter', array($this,'get_counter_style_none'), 20, 13);
 					break;
@@ -1119,9 +1160,14 @@ if(!class_exists('PageExpirationRobot'))
             $styler = "";
 			if($info['position'] == 'invisible')
               $styler = "display:none;";
+           
+            $blkk = "";
+            if($info['expiry_method'] == '1')
+            {
+            	$blkk = "display:none !important;";
+            }
 
-
-			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='float:".$alignCss.";margin:auto;".$styler."' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
+			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='".$blkk."float:".$alignCss.";margin:auto;".$styler."' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
 			$html.="<script>jQuery.noConflict();
 				jQuery(window).load(function(){
 					
@@ -1346,5 +1392,39 @@ function sess_set()
 
    die();
 }
+
+function PER_admin_notice() {
+    global $wpdb;
+    $camp_data = get_posts(array('post_type'=>'per_campaign'));
+    $c = count($camp_data);
+    if($c == 0)
+      {	
+    ?>
+    <div class="updated" style="background-color:#fee;">
+        <p><a href="<?php echo trailingslashit(site_url()).'wp-admin/admin.php?page=page_expiration_robot_new'?>">Create a scarcity campaign</a> using Page Expiration Robot</p>
+    </div>
+    <?php
+      }
+}
+add_action( 'admin_notices', 'PER_admin_notice' );
+
+function firstvisit()
+{
+   $campaign_id = $_POST['campid'];
+   $ip = $_SERVER['REMOTE_ADDR'];
+   $first_visit_ip = get_post_meta($campaign_id,'first_visit_ip',true);
+	if($first_visit_ip != '')
+	{
+	    $first_visit_ip .= ','.$ip;
+		update_post_meta($campaign_id,'first_visit_ip',$first_visit_ip);
+	}
+	else
+	{
+		add_post_meta($campaign_id,'first_visit_ip',$ip);
+	}
+}
+
+add_action('wp_ajax_firstvisit','firstvisit');
+add_action('wp_ajax_nopriv_firstvisit','firstvisit');
 
 ?>

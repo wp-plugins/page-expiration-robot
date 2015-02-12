@@ -29,6 +29,15 @@ window._fbq.push(['track', 'PixelInitialized', {}]);
       Campaign</h2>
     <a href="?page=page_expiration_robot_new" class="add-new-h2">Add New</a>
     <?php
+      if($_GET['page'] == 'page_expiration_robot_new')
+      {
+    ?>
+    <a href="http://www.pageexpirationrobot.com/v2/plugin-support/" target="_blank" class="add-new-h2" style="float:right;">Support</a>
+    <span style="float:right;line-height: 3;">Need Help? Visit </span>
+    <?php
+      }
+    ?>
+    <?php
     if (!$AllowAdd && (!isset($editCampaign) || $editCampaign != 1))
     {
     ?>
@@ -141,6 +150,7 @@ window._fbq.push(['track', 'PixelInitialized', {}]);
               <input type="text" name="redirection_url" id="redirection_url" class="medium_input">
               <br clear="all" />
             </div>
+            <div id="fr_image_main">
             <input type="radio" name="eventf" id="shw_imgg" value="1" class="event">
             <label>Show image and redirect when re-visiting</label>
             <br clear="all" />
@@ -158,6 +168,8 @@ window._fbq.push(['track', 'PixelInitialized', {}]);
             </div>
             <input type="text" name="redirect_m_url" id="redd_url" class="medium_input" placeholder="Redirecting to URL...">
             </div>
+            </div>
+            <div id="fr_all">
             <span id="timed_event_offer">
             <input type="radio" class="event" value="3" disabled="disabled" >
             <label>Show timed event(content) <a href="<?php echo trailingslashit(site_url())?>wp-admin/admin.php?page=page_expiration_robot_addons"> Enable</a></label>
@@ -179,12 +191,13 @@ window._fbq.push(['track', 'PixelInitialized', {}]);
               <br clear="all" />
             </div>
             </span>
-
+            </div>
+            <div id="main_filtered">
             <?php do_action('per_print_expiry_event_select_opt');?>
-          
+            </div>
           </div>
         </div>
-        <div class="step-box">
+        <div id="all_pos" class="step-box">
           <div class="headPart"> <span class="step">3</span>
             <h3>Counter Location</h3>
           </div>
@@ -434,7 +447,7 @@ if(style_count>0)
       var html ='<div class="expiry_method_offer_custom_messege"><span style="color:red;">Oops! you do not have access to this feature </span> <a href="http://www.pageexpirationrobot.com/addons/action_reach" > Click to unlock this add-on! </a> </div>'
       jQuery(this).after(html);
     }
-    else if(jQuery(this).val()=='3'){
+    else if((jQuery(this).val()=='3') || (jQuery(this).val()=='1')){
         console.log('Action Reacher');
         jQuery('.paddLeft .row').eq(0).addClass('noOfAction');
     }

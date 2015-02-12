@@ -266,7 +266,7 @@ PER.checkRequiredCampaignData = function()
 	if(no_error==false){
 
 		jQuery("#errormsg").show();
-
+        jQuery('html, body').animate({scrollTop : 0},800);
 	}
 
 	return no_error;
@@ -357,6 +357,30 @@ setInterval(function(){ var vl = jQuery('#expiry_method').val();
 			jQuery('#save_as_draft_offer .expiry_method').show();
 			jQuery('#event_save_as_draft').parent().show();
 		} }, 100);
+setInterval(function(){ var vl = jQuery('#expiry_method').val();
+		if((vl == '3') || (vl == '1'))
+		{
+			jQuery('#reset_time_for_all_group').hide();
+			
+		} }, 100);
+setInterval(function(){ var vl = jQuery('#expiry_method').val();
+		if((vl == '1'))
+		{
+			jQuery('#fr_all').hide();
+			jQuery('#main_filtered').hide();
+			jQuery('#fr_image_main').hide();
+			//jQuery('#shw_imgg').removeAttr('checked');
+			//jQuery('#event_default_image').removeAttr('checked');
+			jQuery('#event_redirect').attr('checked');
+			jQuery('#all_pos').hide();
+			
+		}else{
+			 jQuery('#fr_all').show();
+			 jQuery('#main_filtered').show();  
+			 jQuery('#fr_image_main').show();
+			 jQuery('#all_pos').show();
+             
+	} }, 1);
 jQuery(document).ready(function(){
 
 	PER.CustomFile();

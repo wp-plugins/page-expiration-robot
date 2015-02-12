@@ -1102,9 +1102,9 @@
 }
 
 .entry-content p, .entry-summary p, .comment-content p, .mu_register p {
-   clear: both;
+   /*clear: both;
    line-height: 1.71429;
-   margin: 0 0 1.71429rem;
+   margin: 0 0 1.71429rem;*/
 }
 
 .noOfAction{
@@ -1132,3 +1132,6 @@
 min-height: 100px;overflow: scroll;padding-top: 30px; text-align: left;width: 100% !important;}
 .labelnew{font-size:14px; text-shadow:none !important; margin-top:-3px !important;}
 .entry-content #countdown_dashboard_1{overflow:visible;}
+.jCountdown .group>.container>.text{ top:0% !important; }
+#countdown_dashboard_1{overflow:visible;}
+#counter_customization #countdown_dashboard_1{overflow:scroll;}
