@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.7
+Version: 3.0.8
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -618,7 +618,11 @@ if(!class_exists('PageExpirationRobot'))
 			
 			/* For first time save cookie expirer_timestamp_campid with current time value */
 			if(!isset($_COOKIE['expirer_timestamp_'.$campaign_id])){
-				echo "<script type='text/javascript' >c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_name + '=' + escape(value);</script>";
+				/*echo "<script type='text/javascript' >var expiration_date = new Date();
+var cookie_string = '';
+expiration_date.setFullYear(expiration_date.getFullYear() + 1);
+c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_name + '=' + escape(value);'expires='+expiration_date;</script>";*/
+				setcookie("expirer_timestamp_".$campaign_id, $mtr,time()+(86400*365));
 				if($onetime=="onetime"){ /* For one time return null*/
 				return "";
 				}
@@ -864,7 +868,8 @@ if(!class_exists('PageExpirationRobot'))
 					    	$counterHtml = "<script type='text/javascript'>
                            function new_imager(per_id){
                              jQuery('.per_'+per_id).hide();
-                             jQuery('#countdown_dashboard_1').hide();
+                             //jQuery('#countdown_dashboard_1').hide();
+                             jQuery('#CountDownTimer1').hide();
                              console.log('Test banner');
                              jQuery('#hid').html(\"<img src='".$image."'>\");
                              jQuery.ajax({
@@ -907,7 +912,8 @@ if(!class_exists('PageExpirationRobot'))
 					    	$counterHtml = "<script type='text/javascript'>
                            function new_imager(per_id){
                              jQuery('.per_'+per_id).hide();
-                             jQuery('#countdown_dashboard_1').hide();
+                             //jQuery('#countdown_dashboard_1').hide();
+                             jQuery('#CountDownTimer1').hide();
                              console.log('Test banner');
                              jQuery('#hid').html(\"<img width='100' height='50' src='".$image."'>\");
                              jQuery.ajax({
@@ -1343,7 +1349,7 @@ if(!isset($PER)){
 }
 
 
-$promotional_settings = get_option('per__promotional_check');
+/*$promotional_settings = get_option('per__promotional_check');
 if($promotional_settings == '')
 {
 
@@ -1352,7 +1358,7 @@ if($promotional_settings == '')
 
             global $wp_admin_bar;
 
-            /* Add the main siteadmin menu item */
+            
                 $wp_admin_bar->add_menu( array(
                     'id'     => 'per-upgrade-bar',
                     'href' => 'http://www.pageexpirationrobot.com/v2/special',
@@ -1363,7 +1369,9 @@ if($promotional_settings == '')
 		}
 
 add_action( 'admin_bar_menu','per_admin_bar_menu', 1000);
-}
+}*/
+
+
 //////***** Adding Custom Pointer *****///////
 add_action('init','pointer_code');
 function pointer_code()
@@ -1426,5 +1434,52 @@ function firstvisit()
 
 add_action('wp_ajax_firstvisit','firstvisit');
 add_action('wp_ajax_nopriv_firstvisit','firstvisit');
+
+function PER_admin_notice_addon_update() {
+        $raw_addons = wp_remote_get( 'http://pageexpirationrobot.com/v2/latest_addons.php' );      
+        
+        $chr = $raw_addons['body'];
+        $obj = json_decode($chr);
+
+        $addOns = $obj;
+        $vers_data = wp_remote_get( 'http://pageexpirationrobot.com/v2/addons_version.php' );
+        $bbdy = $vers_data['body'];
+    
+        $vers_obj = json_decode($bbdy);
+        $available = 0;
+        $InstalledAddOns = unserialize(get_option("per__addons"));
+        //print_r($InstalledAddOns);
+        $expired = 0;
+		foreach ($addOns as $addOn)
+		{
+			$PluginBase1 =  plugin_basename( __FILE__ );
+		    $PluginName1 = trim( dirname( $PluginBase1 ), '/' );
+		    $PluginDir1 = WP_PLUGIN_DIR . '/' . $PluginName1;
+			$bdy = file_get_contents($PluginDir1."/addons/".$addOn->code."/readme.txt");		
+			$addonm_code = $addOn->code;        
+		    preg_match("/Version:(.*)/",$bdy, $converted);
+		    $converted = preg_replace("/[^0-9.]/", "", $converted[1]);
+	        if($vers_obj->$addonm_code != '')
+	        {
+			        if($vers_obj->$addonm_code != $converted)
+			        {
+			        	if($InstalledAddOns[$addOn->code]['act'] == 1)
+			        	{
+			        		$expired++;
+			        	}		        	
+			        }
+	        }
+	     }  
+    if($expired > 0)
+    {
+    ?>
+    <div class="updated" style="background-color:#fee;">
+        <p><span><span id="spanner" class="numbtn"><?php echo $expired; ?></span> Addon Updates Available <a href="<?php echo trailingslashit(site_url())?>wp-admin/admin.php?page=page_expiration_robot_addons">Update Now</a></span></p>
+    </div>
+    <?php
+    }
+}
+add_action( 'admin_notices', 'PER_admin_notice_addon_update' );
+
 
 ?>

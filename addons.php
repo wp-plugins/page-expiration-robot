@@ -1,5 +1,55 @@
 <?php 
 
+/*
+$url_path = PageExpirationRobot::$PluginURL;
+$url_path .= '/copier/'.basename($src);
+$dest = $url_path;
+//file_put_contents($dest, file_get_contents($src));
+
+$source = $src;
+$destination = dirname(__FILE__).'/copier/'.basename($src);
+
+$data = wp_remote_get($source);
+
+$handle = fopen($destination, "w") or die("cant");
+fwrite($handle, $data['body']);
+fclose($handle);*/
+
+if(isset($_POST['update']))
+{
+    $a_name = $_POST['update'];
+    unlink($this->UploadAddonPath."/".$a_name.'.zip');  // Delete it from Upload Folder as Temporary Cache
+    $this->rrmdir($this->PluginDir."/".$this->AddOnFolder."/".$a_name);
+    $src = wp_remote_get('http://pageexpirationrobot.com/v2/addon_secured.php?addon='.$a_name);
+    $src = $src['body'];
+    //$src = "http://pageexpirationrobot.com/v2/wp-content/premium-addons/Actions-Reach4321/action_reach.zip"; //http://pageexpirationrobot.com/v2/wp-content/premium-addons/Actions-Reach4321/action_reach.zip
+$url_path = PageExpirationRobot::$PluginURL;
+$url_path .= '/addons/'.basename($src);
+$dest = $url_path;
+//file_put_contents($dest, file_get_contents($src));
+
+$source = $src;
+$destination = dirname(__FILE__).'/addons/'.basename($src);
+
+$data = wp_remote_get($source);
+
+$handle = fopen($destination, "w") or die("cant");
+fwrite($handle, $data['body']);
+fclose($handle);
+
+copy($this->PluginDir."/".$this->AddOnFolder."/".$a_name.'.zip',$this->UploadAddonPath."/".$a_name.'.zip');
+$this->unzip($a_name.'.zip', $this->PluginDir."/".$this->AddOnFolder);
+
+    @unlink($this->PluginDir."/".$this->AddOnFolder."/".$a_name.'.zip');
+	
+    echo "Updated";
+
+
+
+}
+
+
+
 if (!is_array($this->InstalledAddOns))
 
 	$this->InstalledAddOns = array();
@@ -54,7 +104,7 @@ if (isset($_GET['act']))
 
 				$this->rrmdir($this->PluginDir."/".$this->AddOnFolder."/".$addon);
 				@unlink($this->UploadAddonPath."/".$addon.'.zip');
-
+                $for_expirer[$addon] = 1;
 			}
 
 			break;
@@ -144,7 +194,7 @@ if (isset($_GET['act']))
                 $addon = $nme_splitter[4]; }
                 
 				include($this->PluginDir."/".$this->AddOnFolder."/".$addon."/".$addon.".php");
-
+                                
 				$AddOnName = ucwords(str_replace("_", " ",$addon));
 
 				$AddOnName = str_replace(" ", "",$AddOnName);
@@ -233,7 +283,7 @@ if (isset($_GET['act']))
 <div class="per-wrapper wrap per_addon_manager per_addon_manager_addons_wrap pageExp">
 <div class="header">
   <div class="logo"><img src="<?php echo $this->PluginURL;?>/images/PER_logo.png"></div>
-  <h2>Addons</h2>
+  <h2>Addons</h2> <span id="resolver"></span>
   <div class="addonsAdd">
   	<p>Purchased on add-on? Install it in .zip format</p>
 
@@ -292,11 +342,38 @@ console.log(code);
 
 	/* Loop Through Each Addon from addon list Xml*/
     $c = 0;
+    
+    $vers_data = wp_remote_get( 'http://pageexpirationrobot.com/v2/addons_version.php' );
+    $bbdy = $vers_data['body'];
+    
+    $vers_obj = json_decode($bbdy);
+    //print_r($vers_obj);
+    ?>
+    <script type="text/javascript">
+     function submm(id)
+     {
+     	jQuery('#'+id).submit();
+     }
+    </script>
+    <?php
+        $available = 0;
 	foreach ($addOns as $addOn)
 
 	{
+        $bdy = file_get_contents($this->PluginDir."/".$this->AddOnFolder."/".$addOn->code."/readme.txt");
+		$expired = 0;
 		//print_r($addOn); die();
-
+		$addonm_code = $addOn->code;
+        
+	    preg_match("/Version:(.*)/",$bdy, $converted);
+	    $converted = preg_replace("/[^0-9.]/", "", $converted[1]);
+        if($vers_obj->$addonm_code != '')
+        {
+		        if($vers_obj->$addonm_code != $converted)
+		        {
+		        	$expired = 1;
+		        }
+        }
         $c++;
 		foreach ($addOn->childNodes as $childnode)
 
@@ -306,20 +383,45 @@ console.log(code);
 
 				 $AddOnData[$childnode->nodeName]=$childnode->nodeValue;
 
-		} 
+		}
+
+	   
 
 ?>
-<li class="post-2080 project type-project status-publish hentry first <?php echo $this->getAddOnProperty($addOn->code,'act')==1?'active':''?>" id="post-2080">
+<li class="post-2080 project type-project status-publish hentry first 
+<?php if($this->getAddOnProperty($addOn->code,'act')==1)
+        {
+        	if($expired == 1)
+        	{
+        		if($for_expirer[$addOn->code] != 1)
+        		{
+        		echo "expired";
+        		
+                        $available++;
+                }        
+        	}
+        	else
+        	{
+        		echo "active";
+        	}
+        }
+
+?>" id="post-2080">
 	<h2>
       <span class="cost"></span>
-      <a href="<?php echo $addOn->buylink;?>"><?php echo $addOn->title;?></a>
+      <a href="<?php echo $addOn->buylink;?>"><?php echo $addOn->title;?></a><?php if($this->getAddOnProperty($addOn->code,'act')==1)
+        {if($vers_obj->$addonm_code != '')
+        {if($expired == 1)
+        	{ if($for_expirer[$addOn->code] != 1){?><span class="updd" style="float:right"><a class="width:100px; height:30px; line-height:30px; text-align:center; text-transform:uppercase; font-size:14px; color:#fff; border-radius:3px; background:#1d96dc; position:absolute; left:50%; top:50%;" href="javascript:void(0)" onclick="submm('upd_<?php echo $addOn->code; ?>')">Update</a></span><?php } }}} ?>
     </h2>
     <a class="item" href="<?php echo $addOn->buylink;?>">
         <span class="action ">
         	<img src="<?php echo $addOn->image_url;?>" class="attachment-product-image wp-post-image iconImg" alt="<?php echo $addOn->title;?>" title="" />
         </span>
     </a>
-
+    <form id="upd_<?php echo $addOn->code; ?>" action="" method="post">
+     <input type="hidden" name="update" value="<?php echo $addOn->code; ?>" />
+    </form>
     <p><?php echo $addOn->desc;;?></p>
   
   <table style="width:100%;" id="per_addon_link">
@@ -460,13 +562,23 @@ console.log(code);
 <?php
 
 	}
+	//print_r($version_arr);
 
 }
 
 echo "</ul>";
 
 /* << Acivate Default Counter */
-
+if($available > 0)
+{
+?>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery('#resolver').html('<span id="spannern" class="numbtn"><?php echo $available; ?></span> Addon Updates Available');
+})
+</script>
+<?php
+}
 $addon=$AddOnData['default'];
 
 update_option($this->MetaPrefix."_default_counter",$addon);

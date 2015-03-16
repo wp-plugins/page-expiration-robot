@@ -1,10 +1,10 @@
 === Page Expiration Robot - Countdown Timer ===
 Contributors: socratous139
 Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, schedule, timeclock, count down, countdown clock, countdown timer, counter, counter clock, date countdown, date time, date timer, datetime, days until, event, event countdown timer, expiry, expiry countdown, expiry timer, interval countdown, interval countdown timer, interval timer, javascript countdown, jQuery countdown, time countdown, time until, timer, wordpress countdown timer, wp countdown timer,  countdown widget, scarcity samurai, timerlay, countdown monkey
-Version: 3.0.7
+Version: 3.0.8
 Requires at least: 3.8
-Tested up to: 4.1
-Stable tag: 3.07
+Tested up to: 4.0
+Stable tag: 3.08
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -82,6 +82,17 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 
 == Changelog ==
 
+
+= 3.0.8 - 16/03/2015 =
+
+* Fix - Promo banner in WP dashboard removed
+* Feature - Automatic updation of addon.
+* Fix - Counter Reset on relaunch of Browser is fixed for 'Expire by cookies'.
+* Fix - Banner Default and Custom Image issue problem is fixed.
+* Fix - Counter Showing out of widget boundary fixed.
+* Fix - OP related Live Editor issue Fixed.
+
+
 = 3.0.7 - 12/02/2015 =
 
 * Fix - Polishing up unnecessary options.
@@ -100,7 +111,6 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 * Fix - UI Layout improved.
 * Fix - OTO functionality Fixed.
 * Fix - Reset Expiry Time functionality fixed.
-
 
 = 3.0.5 - 28/11/2014 =
 
