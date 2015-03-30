@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.0.9
+Version: 3.1.0
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -20,14 +20,11 @@ per_get_counter_expire_addon			-	to print javascript code for action to be perfo
 per_get_counter							-	to print html and javascript of counter (default counter html must be returned in filter												hooked function if method condition does not match.)
 per_print_counter_finish_js				-to add action after counter expire- pass values- $NoOfShortcode and												$campaign_id,	Default return -Blank.Return-js code.
 get_counter_text						- to add text or html before counter.dafault:blank
-
 per_get_expiry_action					- filter to change after counter expiry action (javascript)
 										arguments :$counter_expire,$day,$hrs,$mins,$secs,$campaign_id.
 										dafault $counter_expire
-
 'per_expire_visiters_addon'				-to get new time setting argument array($day,$hrs,$mins,$secs), $campaign_id,											"", $info,
 										default: $day,$hrs,$mins,$secs.
-
 get_redirect_link						-to change redirect link arguments $link,$campaign_id,
 										default $link
 'per_onexpirejscode						-filter to do action before counter load if time left is zero .,
@@ -37,11 +34,9 @@ get_redirect_link						-to change redirect link arguments $link,$campaign_id,
 										dafault $cssClass.
  v
 ***** Filters available *****
-
 per_save_expiry_method_data				- Action to save  data coming from add-ons.-pass value -campaign id 
 per_before_action						-Action to do bafore counter starts. -pass value:campaign id.
 per_get_counterHtml_addon'				-action to get html iffor new  expiry event argument :$info['event']
-
 campaign form  actions:
 per_print_expiry_visiters_options:		-action to print expiry visiters options like expire by ip.
 per_print_expiry_method_options			-action to print expiry method options like for action reach prind additional											fields.
@@ -57,7 +52,6 @@ get_counter_demo						-dispaly counter demo of selected counter admin
 //---Main class for Page Expiration Robot---
 /**/
 include("timezones.php");
-
 if(!class_exists('PageExpirationRobot'))
 {
 	class PageExpirationRobot
@@ -78,7 +72,6 @@ if(!class_exists('PageExpirationRobot'))
 		static $NoOfShortcode;
 		static $DefaultCOunter;
 		static $atts;
-
 		function __construct() {
 			global $wpdb;
 			$this->PluginBase =  plugin_basename( __FILE__ );
@@ -94,9 +87,7 @@ if(!class_exists('PageExpirationRobot'))
 			$this->InstalledAddOns = unserialize(get_option($this->MetaPrefix."_addons"));
 			$this->DBTableIP = $wpdb->prefix."page_expiry_ip";
 			PageExpirationRobot::$DefaultCOunter=get_option($this->MetaPrefix."_default_counter");
-
             ///// Upload folder related customization starts from Here ///////
-
             $per_upload_dir = wp_upload_dir(); 
             $per_addon_main_path = $per_upload_dir['basedir'];
             $total_addons_path = $per_addon_main_path.'/'.'per_addons';
@@ -125,14 +116,11 @@ if(!class_exists('PageExpirationRobot'))
 						    foreach($files as $f) 
 						    {  
 									$this->unzip($f, $this->PluginDir."/".$this->AddOnFolder);
-
 						            @unlink($this->PluginDir."/".$this->AddOnFolder."/".$f);
                                     
                                     $addOnSplitter = explode('.',$f);
 					                $addonMainname = $addOnSplitter[0];
-
 					                $this->InstalledAddOns[$addonMainname]['install'] = 1;
-
 									$this->InstalledAddOns[$addonMainname]['act'] = 1;
                             }
 							update_option($this->MetaPrefix."_addons", serialize($this->InstalledAddOns));
@@ -140,17 +128,13 @@ if(!class_exists('PageExpirationRobot'))
                     }
                 }
             }
-
             ///// Upload folder related customization ends at Here ///////
-
 			// Hooks
 			add_action('admin_menu', array($this,'admin_menu'));
 			add_shortcode($this->ShortCode,array($this,"set_contdown"));		
 			add_action('init', array($this,'init'));
 			$this->loadAddOns();
-
 		}
-
 		function recurs_copy($src,$dst) 
         {
 			    $dir = opendir($src);
@@ -167,7 +151,6 @@ if(!class_exists('PageExpirationRobot'))
 			    }
 			    closedir($dir);
 	    }
-
         function checkFolderIsEmptyOrNot ( $folderName )
         {
 			    $files = array ();
@@ -208,7 +191,6 @@ if(!class_exists('PageExpirationRobot'))
 				}
 			}
 		}
-
 		function getAddOnProperty($addOn, $Property)
 		{
 			if (isset($this->InstalledAddOns[$addOn]))
@@ -249,7 +231,6 @@ if(!class_exists('PageExpirationRobot'))
 				}
 			}
 		}
-
 		function init()
 		{
 			/* Add Stylesheet in admin and in fornend */
@@ -258,7 +239,6 @@ if(!class_exists('PageExpirationRobot'))
 			wp_enqueue_script('jquery');
 			wp_register_script( 'jquery-migrate', plugins_url( '/jcountdown/jquery-migrate-1.2.1.min.js', __FILE__ ), array('jquery'), 1,true);
 		
-
 			add_action( 'admin_enqueue_scripts', array($this,'front_scripts')); 
 			wp_register_script( 'per_admin_js', plugins_url( '/js/admin.js', __FILE__ ), array('jquery'), 1, true);
 			wp_register_script( 'per_js', plugins_url( '/js/page_expiration_robot.js', __FILE__ ), array('jquery'));
@@ -272,7 +252,6 @@ if(!class_exists('PageExpirationRobot'))
 			add_action('wp_ajax_per_edit_ip', array($this,'expirer_edit_ip_list'));
 			wp_enqueue_script("jquery-migrate");
 			
-
 			/* 
 			Register campaign as custom post type 
 			Title will be post title and other settings will be meta of the post
@@ -307,7 +286,6 @@ if(!class_exists('PageExpirationRobot'))
 				'exclude_from_search'=>	true,
 				'supports'			 => array('title','author','custom-fields')
 			  );
-
 			register_post_type( $this->CampaignPostType, $args );
 		}
 		/* Function to add PER Menu in admin */
@@ -328,14 +306,12 @@ if(!class_exists('PageExpirationRobot'))
 			wp_enqueue_style( 'per_clock_timer_css');
 			wp_register_script( 'per_default_js', plugins_url( '/js/jquery.lwtCountdown-1.0.js', __FILE__ ), array('jquery'), 1, true);
 			wp_enqueue_script("per_default_js");
-
 			//for defoult jquery coundown
 			wp_register_script( 'per_default_countdown_style_js_custom', plugins_url( '/js/jcountdown/custom.js', __FILE__ ), array('jquery'), 1, true);
 			wp_enqueue_script("per_default_countdown_style_js_custom");
 			wp_register_script( 'per_default_countdown_js_min', plugins_url( '/js/jcountdown/jquery.jcountdown.min.js', __FILE__ ), array('jquery'), 1, true);
 			wp_enqueue_script("per_default_countdown_js_min");
 			wp_enqueue_style( 'default_countdown_css', plugins_url('/js/jcountdown/jcountdown.css', __FILE__) );
-
 		}
 		/* function  to delete uninstall addon */
 		function rrmdir($dir) { 
@@ -406,20 +382,17 @@ if(!class_exists('PageExpirationRobot'))
 			wp_enqueue_script("per_default_countdown_js_min");
 			wp_enqueue_style( 'default_countdown_css', plugins_url('/js/jcountdown/jcountdown.css', __FILE__) );
 		}
-
 		static function getCampaignCounterStyle($PostId)
 		{
 			global $post;
 			if (!isset($PostId) || $PostId == "")
 				$PostId = $post->ID;
-
 			/*if ( PageExpirationRobot::$CampaignPostType == $_POST['post_type'] ) {
 				return;
 			}*/
 			/*if ( wp_is_post_revision( $PostId ) )
 				return;*/
 			$Pattern = get_shortcode_regex();
-
 			if (   preg_match_all( '/'. $Pattern.'/s', $post->post_content, $Matches ) && array_key_exists( 2, $Matches ) && in_array( PageExpirationRobot::$ShortCode, $Matches[2] ) )
 			{
 				// shortcode is being used
@@ -451,23 +424,19 @@ if(!class_exists('PageExpirationRobot'))
 			$event="";
 			$redirection_url="";
 			$splash_url="";
-
 			//Newly Added
 			$color_num = "";
 			$back_color = "";
 			$counter_size = "";
 			$alignment = "";
-
 			$myhexcode = "";	
 			$myhexcode1= "";
-
 			$days_label = "";
 			$hours_label = "";
 			$min_label = "";
 			$sec_label = "";
 			$label_color = "";
 			$shadow_color = "";
-
 			$hide_day_label = "";
 			$hide_hrs_label = "";
 			$hide_mins_label = "";
@@ -515,32 +484,26 @@ if(!class_exists('PageExpirationRobot'))
 			update_post_meta( $campaign_id, $this->MetaPrefix.'expiry_date_time_hrs', $_POST['expiry_date_time_hrs']);
 			update_post_meta( $campaign_id, $this->MetaPrefix.'expiry_date_time_mins', $_POST['expiry_date_time_mins']);
 			update_post_meta( $campaign_id, $this->MetaPrefix.'expiry_date_time_secs', $_POST['expiry_date_time_secs']);
-
 			if(isset($_POST['method'])){
 			update_post_meta( $campaign_id, $this->MetaPrefix.'method', $_POST['method']);
 			}
-
 			update_post_meta( $campaign_id, $this->MetaPrefix.'position', $_POST['position']);
 			update_post_meta( $campaign_id, $this->MetaPrefix.'event', $_POST['event']);
 			update_post_meta( $campaign_id, $this->MetaPrefix.'redirection_url', $_POST['redirection_url']);
 			update_post_meta( $campaign_id, $this->MetaPrefix.'redirect_m_url', $_POST['redirect_m_url']);
 			update_post_meta( $campaign_id, $this->MetaPrefix.'splash_url', $_POST['splash_url']);
-
 			update_post_meta($campaign_id, $this->MetaPrefix.'color_num',$_POST['color_num']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'back_color',$_POST['back_color']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'counter_size',$_POST['counter_size']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'alignment',$_POST['alignment']);
-
 			update_post_meta($campaign_id, $this->MetaPrefix.'myhexcode',$_POST['myhexcode']);	
 			update_post_meta($campaign_id, $this->MetaPrefix.'myhexcode1',$_POST['myhexcode1']);
-
 			update_post_meta($campaign_id, $this->MetaPrefix.'days_label',$_POST['days_label']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'hours_label',$_POST['hours_label']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'min_label',$_POST['min_label']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'sec_label',$_POST['sec_label']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'label_color',$_POST['label_color']);
 			update_post_meta($campaign_id, $this->MetaPrefix.'shadow_color',$_POST['shadow_color']);
-
 			update_post_meta($campaign_id,$this->MetaPrefix.'hide_day_label',0);
 			update_post_meta($campaign_id,$this->MetaPrefix.'hide_hrs_label',0);
 			update_post_meta($campaign_id,$this->MetaPrefix.'hide_mins_label',0);
@@ -550,9 +513,46 @@ if(!class_exists('PageExpirationRobot'))
             //***** For Banner content to Save ****///////
             if(!isset($_GET['pid']))
             {
-		            $banner_conts = $_SESSION["banner_conts"];
+		            $banner_conts = $_SESSION['banner_conts'];
 		            $banner_color = $_SESSION["banner_color"];
 		            $banner_text = $_SESSION["banner_text"];
+					
+				if( empty($banner_conts)){
+						$banner_conts = '<div class="bannerBox ui-sortable" id="sortable">
+							<div class="dragbox">
+							  <div class="timer"> <span class="dragblue-text editText mce-content-body" id="mce_0" contenteditable="true" spellcheck="false">This offer will expire in:</span><input type="hidden" name="mce_0"> </div>
+							  <div class="dragbox-upper ui-sortable-handle"> Drag<a href="#">X</a> </div>
+							</div>
+							<div class="dragbox timerBox">
+							  <div class="timer">
+								<div class="timer-day"> <span class="timerday-text">00 </span>
+								  <div class="timer-label">days </div>
+								</div>
+								<div class="timer-day"> <span class="timerday-text">00 </span>
+								  <div class="timer-label">hours </div>
+								</div>
+								<div class="timer-day"> <span class="timerday-text">00 </span>
+								  <div class="timer-label">mins </div>
+								</div>
+								<div class="timer-day"> <span class="timerday-text">00 </span>
+								  <div class="timer-label">secs </div>
+								</div>
+							  </div>
+							  <div class="dragbox-upper ui-sortable-handle"> Drag </div>
+							</div>
+							<div class="dragbox dragboxText">
+							  <div class="timer"> <span class="dragblue-text editText mce-content-body" id="mce_1" contenteditable="true" spellcheck="false">Text</span><input type="hidden" name="mce_1"> </div>
+							  <div class="dragbox-upper ui-sortable-handle"> Drag <a href="#">X</a> </div>
+							</div>
+						   
+							<div class="dragbox dragboxText">
+							  <div class="timer"> <span class="dragyellow-text editText mce-content-body" id="mce_2" contenteditable="true" spellcheck="false">Text</span><input type="hidden" name="mce_2"> </div>
+							  <div class="dragbox-upper ui-sortable-handle"> Drag<a href="#">X</a> </div>
+							</div>
+							
+						  </div>';
+
+					}
 		            add_post_meta( $campaign_id, 'per_banner', $banner_conts );
 		            add_post_meta( $campaign_id, 'per_banner_color', $banner_color );
 		            add_post_meta( $campaign_id, 'per_banner_text', $banner_text );
@@ -560,7 +560,6 @@ if(!class_exists('PageExpirationRobot'))
 		            unset($_SESSION["banner_color"]);
 		            unset($_SESSION["banner_text"]);
             }
-
 			/* Action TO Save data from Add-ons */
 			do_action('per_save_expiry_method_data',$campaign_id);		
 			/* If Hide label is checkedsave hide label data */
@@ -660,37 +659,116 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 		
 		/* Action After counter expire (js code)*/
 		function after_counter_expire($link,$info,$campaign_id)
-		{
-			$html="<script language='javascript' type='text/javascript'>function showExpireAction".$campaign_id."(counter){";
+		{	
+			
 			/*Apply Filter to get new event settings from addon */
+			
+			$html="<script language='javascript' type='text/javascript'>function showExpireAction".$campaign_id."(counter){document.cookie='refresh_per_reset_".$campaign_id."=".$campaign_id."';";
+			$html .="
+		
+					jQuery.ajax({  
+					  type: 'POST',
+					  url: '". trailingslashit(admin_url()) ."admin-ajax.php',
+					  data: { action:'expired_once',campid:". $campaign_id."}
+					})
+					  .done(function( msg ) {
+						console.log( 'Test from IP First' );
+						
+					  });  
+					
+					";
 			$html.=apply_filters('per_print_counter_finish_js','',PageExpirationRobot::$NoOfShortcode,$campaign_id);
+			
 			if($info['expiry_method'] != 1)
 			{
-			if ($link!="" && $info['event']==0){
-				 $html.= 'window.location="'.$link.'";';
+				if ($link!="" && $info['event']==0){
+					 $html.= 'window.location="'.$link.'";';
+				}
+			} 
+	
+		if($info['expiry_method'] == 0){
+			
+			$html .= "document.cookie='campaign_id_rev_date_".$campaign_id."=".$campaign_id."';";
+	  	  if($_COOKIE['campaign_id_rev_date_'.$campaign_id] == $campaign_id)
+			{ 
+			
+                if ($link!="" && ($info['event']==0 || $info['expiry_method'] == 1 || $info['expiry_method'] == 2)){
+					$html.= 'window.location="'.$link.'";'; 
+				}
+				
+			}
+			
 		}
-	}
-	  if($info['expiry_method'] == 1)
+		
+		$reset_counter=get_post_meta( $campaign_id, $this->MetaPrefix.'reset_counter', true);
+		
+		if($reset_counter == "reset_counter" && $_COOKIE['refresh_per_reset_'.$campaign_id] == $campaign_id){
+			
+			$html.= 'window.location="'.$link.'";'; 
+			
+		}
+		
+		$no_of_times=get_post_meta($campaign_id, $this->MetaPrefix.'no_of_times', true);
+		$reset=true;
+
+		/* << Check no of time remaining if 0 then make reset false */
+		if($no_of_times>-2){
+			$no_of_times_executed=get_post_meta($campaign_id, $this->MetaPrefix.'no_of_times_executed', true);
+			if($no_of_times_executed=="")$no_of_times_executed=0;
+			$no_of_time1=$no_of_times-$no_of_times_executed;
+			if($no_of_time1<=-1)$reset=false;
+		}
+	  if($info['expiry_method'] == 1 || $info['expiry_method'] == 2)
 	  {
 	  	  $method = $info['method'];
 	  	  if($method == 'ip')
-	  	  {
+	  	  { 
+			 if( $reset_counter=="reset_counter" && $reset==true){
+			  
+				  $html .= "";
+				  
+			  }else{
+				  $html .="
+		
+					jQuery.ajax({
+					  type: 'POST',
+					  url: '". trailingslashit(admin_url()) ."admin-ajax.php',
+					  data: { action:'firstvisit',campid:". $campaign_id."}
+					})
+					  .done(function( msg ) {
+						console.log( 'Test from IP First' );
+						
+					  });  
+					
+					";
+			  }
               $ip = $_SERVER['REMOTE_ADDR'];
               $ip_chk = get_post_meta($campaign_id,'first_visit_ip',true);
               $ip_arr = explode(',',$ip_chk);
-              if(in_array($ip,$ip_arr))
+              if(in_array($ip,$ip_arr) && $info['event'] != 3 && $info['event'] != 5)
               {
-              	  $html.= 'window.location="'.$link.'";'; 
+				  
+				$html.= 'window.location="'.$link.'";'; 
+			
               }
 	  	  }
 	  	  else
-	  	  	  {
-	  	  if($_COOKIE['campaign_id'] == $campaign_id)
-			{
-                //echo "sessioned";
-                $html.= 'window.location="'.$link.'";'; 
+	  	  	  { 
+		  if( $reset_counter=="reset_counter" && $reset==true){
+			  
+				  $html .= "";
+				  
+			  }else{
+				$html .= "document.cookie='campaign_id_rev=".$campaign_id."';";
+			  }
+	  	  if($_COOKIE['campaign_id_rev'] == $campaign_id && $info['event'] != 3 && $info['event'] != 5)
+			{ 			
+              
+				$html.= 'window.location="'.$link.'";'; 
+				
 			}
 		}
+
 	  }
 			if ($info['event']!=""){
 				if($info['expiry_method'] != 3)
@@ -730,7 +808,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			$info['expiry_method'] = get_post_meta($campaign_id, $this->MetaPrefix.'expiry_method',true);
 			/*First Action */
 			do_action('per_before_action',$campaign_id);
-
 			if ($info['expiry_method']!= "")
 			{	/* Get Related Values of Campaign */
 				$info['expiry_time'] = get_post_meta($campaign_id, $this->MetaPrefix.'expiry_date',true);
@@ -751,17 +828,14 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				$info['back_color'] = get_post_meta($campaign_id, $this->MetaPrefix.'back_color',true);
 				$info['counter_size']= get_post_meta($campaign_id, $this->MetaPrefix.'counter_size',true);
 				$info['alignment'] = get_post_meta($campaign_id, $this->MetaPrefix.'alignment',true);
-
 				$info['myhexcode'] = get_post_meta($campaign_id, $this->MetaPrefix.'myhexcode',true);	
 				$info['myhexcode1']= get_post_meta($campaign_id, $this->MetaPrefix.'myhexcode1',true);
-
 				$info['days_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'days_label',true);
 				$info['hours_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'hours_label',true);
 				$info['min_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'min_label',true);
 				$info['sec_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'sec_label',true);
 				$info['label_color'] = get_post_meta($campaign_id, $this->MetaPrefix.'label_color',true);
 				$info['shadow_color'] = get_post_meta($campaign_id, $this->MetaPrefix.'shadow_color',true);
-
 				$info['hide_day_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'hide_day_label',true);
 				$info['hide_hrs_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'hide_hrs_label',true);
 				$info['hide_mins_label'] = get_post_meta($campaign_id, $this->MetaPrefix.'hide_mins_label',true);
@@ -781,6 +855,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				$image = "";
 				$counterHtml="";
 				$display_counter=true;
+				
 				switch($info['expiry_method']){ /* Get time depending upon expiry method */
 					case 2:  /* << for specific amount of time */
 						if (!$whitelisted )
@@ -820,7 +895,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 						if($info['method'] == 'ip')
 						{
 						?>
-                        <script type="text/javascript">
+                        <script type="text/javascript">console.log("1");
 						jQuery.ajax({
 						      type: 'POST',
 						      url: '<?php echo trailingslashit(admin_url()); ?>admin-ajax.php',
@@ -853,9 +928,18 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 						$info['hide_sec_label'] =1;
 				}
 				/* filter to get time setting from addons */
-
 				/* for evant after counter reaches zero */
-				$link=$info['redirection_url'];
+				
+				if($info['redirection_url'] != ""){
+					
+					$link=$info['redirection_url'];
+					
+				}else{
+					
+					$link=$info['redirect_m_url'];
+					
+				}				
+				
 				switch($info['event']){ /* Get html depending upon expiry event */
 					case 0:		/* if event is Redirectional url */
 						$link=$info['redirection_url'];
@@ -949,7 +1033,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 						$counterHtml .= "<img src='".$image."'>";
 					   }
 					break;
-
 					case 4:	global $post;	/* if event is Show Own Image */
 						echo "<script type='text/javascript'> jQuery(document).ready(function(){
                               jQuery.ajax({
@@ -970,7 +1053,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
                    })
 						</script>";
 					break;
-
 					/*case "":		/* if event is Do nothing (Stay on same page) 
 						$counterHtml="";
 					break;*/
@@ -984,7 +1066,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				}
 				$onexpirejscode="";
 				$link=apply_filters('get_redirect_link',$link,$campaign_id);
-
 				if($day <= 0 && $hrs<=0 && $mins<=0 && $secs<=0 && $link !="" ){
 						//$onexpirejscode='<script type="text/javascript">window.location="'.$link.'";</script>';
 				}
@@ -1003,9 +1084,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 						$cssClass=apply_filters('per_get_counter_position_addon',$cssClass,$info['position']); //for Addons for positiom form ad
 				}
 				
-
 			 
-
 				// switch($info['counter_size']){/* define counter size */
 				// 	case '0':
 				// 			$sizeClass="small";
@@ -1018,7 +1097,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				// 	break;
 				// }
 				$sizeClass=$info['counter_size'];
-
 				switch($info['alignment']){/* define counter Alignment */
 					case '0':
 							$alignCss="left";
@@ -1062,20 +1140,34 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			$html.=apply_filters('get_counter_text','',$campaign_id,$alignCss,$sizeClass);
 			$wdth=100;
 			if($info['position']=='h' ||$info['position']=='f')$wdth=100;
-			$html.='<div id="countdown_dashboard_'.PageExpirationRobot::$NoOfShortcode.'" style="width:'.$wdth.'%;margin:0px auto;float:'.$alignCss.';"';
+			$html.='<div id="countdown_dashboard_'.PageExpirationRobot::$NoOfShortcode.'" style="width:'.$wdth.'%;';
 			if($display_counter==false){
-				$html.="none;";
+				$html.="display:none;";
 			}
 			else{
-				$html .="block;";
+				$html .="display:block;";
 			}
 			/* code to show counter message*/
-			$html.='text-align:left;float:'.$alignCss.';" class="counter_'.$sizeClass.'"><div style="margin:0px auto;" class="main_counter_wrap main_counter_wrap_'.$alignCss.'" id="'.$counter_style_name.'">';
+			
+			if($alignCss == "left"){
+				
+				$alignPER = "left";
+				
+			}else if($alignCss == "right"){
+				
+				$alignPER = "right";
+				
+			}else{
+				
+				$alignPER = "center";
+				
+			}
+			$html.='text-align:'.$alignPER.'" class="counter_'.$sizeClass.'"><div style="display:inline-block;" class="main_counter_wrap main_counter_wrap_'.$alignCss.'" id="'.$counter_style_name.'">';
 			$DefaultCounter="";
 			/* filter to get different counter styles  */
 			$html.=apply_filters('per_get_counter',$DefaultCounter,$day,$hrs,$mins,$secs,$link,$image,$cssClass,$alignCss,$display_counter,$sizeClass,$info,$campaign_id);
-            $per_banner = get_post_meta( $campaign_id, 'per_banner', true );
-            
+            $per_banner = get_post_meta($campaign_id, 'per_banner',true);
+
             if($info['position']=='f')
             {
                $html .= '<div id="per_banner_id" class="per_footer_banner" data-width="'.$size.'">'.$per_banner.'</div>';
@@ -1085,14 +1177,11 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
                
                $html .= '<div id="per_banner_id" class="per_header_banner" data-width="'.$size.'">'.$per_banner.'</div>';
             }
-
 			//code for default counter
 			
 			if (!wp_style_is( "flip_css", 'enqueued' ))
 			{
-
 			
-
 			$flip_style = 'slide';
 			$flip_theme = 'black';
 			$no_of_shortcodes=PageExpirationRobot::$NoOfShortcode;
@@ -1102,7 +1191,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			// if($sizeClass=="small"){$size=250;}
 			$size=$sizeClass;
 			$i=0;
-
 			if($sizeClass<=350 && $sizeClass<=450)
 			{
 				$tsize=50;
@@ -1115,7 +1203,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			}else
 			{
 			}	
-
 			// if($sizeClass=="small")$tsize=50;
 			// if($sizeClass=="medium")$tsize=60;
 			// if($sizeClass=="large")$tsize=80;
@@ -1126,7 +1213,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			if($info['sec_label_hide']=="none")$i++;
 			$s=$tsize-(10*$i);
 			$size=$size-(66*$i)."%";
-
 			if($cssClass!='')
 			 {
 			 	if($cssClass=='bottom_fixed')
@@ -1136,9 +1222,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			 		 {
 			 		 	echo $per_banner ='<div id="per_banner_id" class="per_footer_banner" data-width="'.$size.'">'.$per_banner.'</div>';
 			 		 }
-
 			 	}
-
 			 	if($cssClass=='top_fixed')
 			 	{
 			 		
@@ -1147,17 +1231,9 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			 		 {
 			 		 	echo $per_banner ='<div id="per_banner_id" class="per_header_banner" data-width="'.$size.'">'.$per_banner.'</div>';
 			 		 }
-
 			 	}
-
 			 }
-
-
-
-
-
 			$current_time =$mtr=time();
-
 			$nextdate= strtotime("+$day days $hrs hours $mins minute $secs seconds");
 			$nextdate= $nextdate - 4;
 			
@@ -1172,8 +1248,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
             {
             	$blkk = "display:none !important;";
             }
-
-			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='".$blkk."float:".$alignCss.";margin:auto;".$styler."' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
+			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='".$blkk.";' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
 			$html.="<script>jQuery.noConflict();
 				jQuery(window).load(function(){
 					
@@ -1207,7 +1282,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 						showExpireAction".$campaign_id."(".PageExpirationRobot::$NoOfShortcode.");
 						
 					}
-
 				});
 				var jCountdownContainer=jQuery('#CountDownTimer".PageExpirationRobot::$NoOfShortcode." .jCountdownContainer').width();
 				jQuery('#CountDownTimer".PageExpirationRobot::$NoOfShortcode."').width(jCountdownContainer);
@@ -1219,7 +1293,6 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				jQuery('#CountDownTimer".PageExpirationRobot::$NoOfShortcode." .label').removeClass('label');
 				jQuery('#CountDownTimer".PageExpirationRobot::$NoOfShortcode." .labelnew').css({'color': '".$info['label_color']."','text-shadow':'1px 1px  ".$info['shadow_color']."'});
 			});
-
 			</script>";
 			if($day<=0 && $hrs<=0 && $mins<=0 && $secs<=0){
 				$html.="<script>
@@ -1230,22 +1303,17 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			}
           
             $html.=apply_filters('per_get_counter',$DefaultCounter,$day,$hrs,$mins,$secs,$link,$image,$cssClass,$alignCss,$display_counter,$sizeClass,$info,$campaign_id);
-
             /*$qry="SELECT * FROM {$wpdb->prefix}page_expiry_action_reach WHERE P_Id=$campaign_id  LIMIT 1";			
 			$actioninfo = $wpdb->get_row($qry, ARRAY_A);
 			$balnce_reach = $actioninfo['balance_reach'];
 			$balnce_reach++;
 			$upd_ssql="UPDATE {$wpdb->prefix}page_expiry_action_reach SET balance_reach = $balnce_reach WHERE P_Id=".$campaign_id." AND balance_reach > 0";							
 			$wpdb->query($upd_ssql);*/
-
 		} 
 			$counter_expire=$this->after_counter_expire($link,$info,$campaign_id);
-
 			$html.=apply_filters('per_get_expiry_action',$counter_expire,$day,$hrs,$mins,$secs,$campaign_id);
-
-			$html.="<div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div>";  // 20.11.2014 from this line two </div> were removed at the begining of $html .= and two at the end, because on optimize press wp theme it closed wrapper and container div tag before it ends and messed whole page IK
+			$html.="</div></div><div style='clear:both;'></div><div style='display:none;margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div></div>";
 			$html=apply_filters('per_counter_html',$html,$day,$hrs,$mins,$secs,$campaign_id,$info);
-
 			return $html;
 			/* code to show counter */
 		}
@@ -1334,30 +1402,22 @@ class PerEditorButton
 	}
 	
 	function filter_mce_plugin( $plugins ) {
-		// this plugin file will work the magic of our button
-		$form='</table>';
-		$plugins['per_editor_button'] = plugin_dir_url( __FILE__ ) . 'shortcode_js.php';
+		
+		$plugins['per_editor_button'] = plugin_dir_url( __FILE__ ).'shortcode_js.js';
 		return $plugins;
 	}	
 }
-
 if (!isset($PerEditorButton))
 	$PerEditorButton = new PerEditorButton();
 /* timymce button */
 if(!isset($PER)){
 	$PER = new PageExpirationRobot();
 }
-
-
 /*$promotional_settings = get_option('per__promotional_check');
 if($promotional_settings == '')
 {
-
-
 	function per_admin_bar_menu(){
-
             global $wp_admin_bar;
-
             
                 $wp_admin_bar->add_menu( array(
                     'id'     => 'per-upgrade-bar',
@@ -1367,11 +1427,8 @@ if($promotional_settings == '')
                     'meta'   => array('class' => 'per-upgrade-to-pro', 'target' => '_blank' ),
                 ) );
 		}
-
 add_action( 'admin_bar_menu','per_admin_bar_menu', 1000);
 }*/
-
-
 //////***** Adding Custom Pointer *****///////
 add_action('init','pointer_code');
 function pointer_code()
@@ -1380,10 +1437,8 @@ function pointer_code()
      if(!session_start())
      	session_start();
 }
-
 add_action('wp_ajax_sess_set','sess_set');
 add_action('wp_ajax_nopriv_sess_set','sess_set');
-
 function sess_set()
 {
    $expiry_method = $_POST['exp'];
@@ -1396,11 +1451,8 @@ function sess_set()
 					    $_SESSION['redirect_m_url'] = $url;
 				
             }
-
-
    die();
 }
-
 function PER_admin_notice() {
     global $wpdb;
     $camp_data = get_posts(array('post_type'=>'per_campaign'));
@@ -1431,8 +1483,91 @@ function firstvisit()
 		add_post_meta($campaign_id,'first_visit_ip',$ip);
 	}
 }
-
 add_action('wp_ajax_firstvisit','firstvisit');
 add_action('wp_ajax_nopriv_firstvisit','firstvisit');
+
+function expired_once($campaign_id)
+{
+	
+	$check = get_post_meta($_POST['campid'], 'per_reseted_alr', true);
+	
+	if($check == ""){
+		add_post_meta($_POST['campid'],'per_reseted_alr','1');
+		echo $_POST['campid'];
+	}
+ 
+}
+add_action('wp_ajax_get_my_form',  'get_my_form');
+function get_my_form(){
+	
+	$form='<div id="per_editor-form"><table id="per_editor-table" class="form-table"><div class="per-wrapper"><div class="header"><div class="logo"><img src="'.WP_PLUGIN_URL.'/page-expiration-robot/images/PER_logo.png" style="height:34px;"></div><h2>Add Shortcode</h2></div><table style="width: 520px;" cellspacing="2" cellpadding="0">';
+	$form.='<tr style="height:20px;" class="" id="camp_row'.get_the_ID().'"><td style="width:5px;"><select id="counter_selector" style="float: left;">';
+	$args = array(
+				  'post_type'	  => 'per_campaign'	
+				);
+	query_posts( $args );
+
+	while ( have_posts() ) : the_post();
+		$id=get_the_ID();
+		$form.='<option value="'.get_the_ID().'">'.get_the_title().'</option>';
+		//$form.='<tr style="height:20px;" class="hide_all" id="camp_row'.get_the_ID().'"><td style="width:5px;"><input type="radio" name="orderby" id="per_editor-orderby"  value="'.get_the_ID().'">&nbsp&nbsp&nbsp<strong><a class="row-title" >'.get_the_title().'</a></strong></td></tr>';
+		
+
+	endwhile;
+	$form.='</select><input type="button" id="per_editor-submit" class="button-primary per-green-button" value="Insert Shortcode" name="submit" style="float: left; margin-left: 10px" /></td></tr>';
+	$form.='<tr><td ></td </tr><tr><td ></td></tr></table></div></div>';
+
+	echo $form;
+	exit();
+	
+}
+
+add_action('wp_ajax_expired_once','expired_once');
+add_action('wp_ajax_nopriv_expired_once','expired_once');
+
+function PER_admin_notice_addon_update() {
+	$raw_addons = wp_remote_get( 'http://pageexpirationrobot.com/v2/latest_addons.php' );      
+	
+	$chr = $raw_addons['body'];
+	$obj = json_decode($chr);
+
+	$addOns = $obj;
+	$vers_data = wp_remote_get( 'http://pageexpirationrobot.com/v2/addons_version.php' );
+	$bbdy = $vers_data['body'];
+
+	$vers_obj = json_decode($bbdy);
+	$available = 0;
+	$InstalledAddOns = unserialize(get_option("per__addons"));
+	//print_r($InstalledAddOns);
+	$expired = 0;
+	foreach ($addOns as $addOn)
+	{
+		$PluginBase1 =  plugin_basename( __FILE__ );
+		$PluginName1 = trim( dirname( $PluginBase1 ), '/' );
+		$PluginDir1 = WP_PLUGIN_DIR . '/' . $PluginName1;
+		$bdy = file_get_contents($PluginDir1."/addons/".$addOn->code."/readme.txt");		
+		$addonm_code = $addOn->code;        
+		preg_match("/Version:(.*)/",$bdy, $converted);
+		$converted = preg_replace("/[^0-9.]/", "", $converted[1]);
+		if($vers_obj->$addonm_code != '')
+		{
+				if($vers_obj->$addonm_code != $converted)
+				{
+					if($InstalledAddOns[$addOn->code]['act'] == 1)
+					{
+						$expired++;
+					}		        	
+				}
+		}
+	 }  
+	if($expired > 0)
+	{
+		?>
+		<div class="updated" style="background-color:#fee;">
+			<p><span><span id="spanner" class="numbtn"><?php echo $expired; ?></span> Addon Updates Available <a href="<?php echo trailingslashit(site_url())?>wp-admin/admin.php?page=page_expiration_robot_addons">Update Now</a></span></p>
+		</div>
+		<?php
+	}
+}
 
 ?>
