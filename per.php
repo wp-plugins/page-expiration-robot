@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.1.0
+Version: 3.1.1
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
