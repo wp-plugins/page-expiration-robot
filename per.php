@@ -1248,7 +1248,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
             {
             	$blkk = "display:none !important;";
             }
-			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='".$blkk.";' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
+			$html="<div style='width:100%;text-align:".$alignPER."'><div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='display:inline-block;".$blkk.";width:100%;' class='".$alignCss."flipcounter per_".$campaign_id."'></div></div>";
 			$html.="<script>jQuery.noConflict();
 				jQuery(window).load(function(){
 					
@@ -1266,7 +1266,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 					timeText:'".$nextdate."',
 					style:'".$flip_style."',
 					color:'".$flip_theme."',
-					width:'".$size."',
+					width:'$size',
 					textGroupSpace:15,
 					textSpace:0,
 					reflection:false,
