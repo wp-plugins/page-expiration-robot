@@ -1,10 +1,10 @@
 === Page Expiration Robot - Countdown Timer ===
 Contributors: socratous139
 Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, schedule, timeclock, count down, countdown clock, countdown timer, counter, counter clock, date countdown, date time, date timer, datetime, days until, event, event countdown timer, expiry, expiry countdown, expiry timer, interval countdown, interval countdown timer, interval timer, javascript countdown, jQuery countdown, time countdown, time until, timer, wordpress countdown timer, wp countdown timer,  countdown widget, scarcity samurai, timerlay, countdown monkey
-Version: 3.1.2
+Version: 3.1.3
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 3.12
+Stable tag: 3.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -82,9 +82,9 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 
 == Changelog ==
 
-= 3.1.2 - 2/04/2015 =
+= 3.1.3 - 3/04/2015 =
 
-* Fix - Fixed issue with alignment
+* Fix - Layout theme fixes
 
 = 3.1.1 - 1/04/2015 =
 

@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.1.2
+Version: 3.1.3
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -1140,7 +1140,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			$html.=apply_filters('get_counter_text','',$campaign_id,$alignCss,$sizeClass);
 			$wdth=100;
 			if($info['position']=='h' ||$info['position']=='f')$wdth=100;
-			$html.='<div id="countdown_dashboard_'.PageExpirationRobot::$NoOfShortcode.'" style="width:'.$wdth.'%;';
+			$html.='<div id="countdown_dashboard_'.PageExpirationRobot::$NoOfShortcode.'" style="width:'.$wdth.'%;margin:0px auto;float:'.$alignCss.';"';
 			if($display_counter==false){
 				$html.="display:none;";
 			}
@@ -1162,7 +1162,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				$alignPER = "center";
 				
 			}
-			$html.='text-align:'.$alignPER.'" class="counter_'.$sizeClass.'"><div style="display:inline-block;" class="main_counter_wrap main_counter_wrap_'.$alignCss.'" id="'.$counter_style_name.'">';
+			$html.='text-align:left;float:'.$alignCss.';" class="counter_'.$sizeClass.'"><div style="margin:0px auto;" class="main_counter_wrap main_counter_wrap_'.$alignCss.'" id="'.$counter_style_name.'">';
 			$DefaultCounter="";
 			/* filter to get different counter styles  */
 			$html.=apply_filters('per_get_counter',$DefaultCounter,$day,$hrs,$mins,$secs,$link,$image,$cssClass,$alignCss,$display_counter,$sizeClass,$info,$campaign_id);
@@ -1248,7 +1248,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
             {
             	$blkk = "display:none !important;";
             }
-			$html="<div style='width:100%;text-align:".$alignPER."'><div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='display:inline-block;".$blkk.";width:100%;' class='".$alignCss."flipcounter per_".$campaign_id."'></div></div>";
+			$html="<div id='CountDownTimer".PageExpirationRobot::$NoOfShortcode."' style='".$blkk."float:".$alignCss.";margin:auto;".$styler."' class='".$alignCss."flipcounter per_".$campaign_id."'></div>";
 			$html.="<script>jQuery.noConflict();
 				jQuery(window).load(function(){
 					
@@ -1312,7 +1312,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 		} 
 			$counter_expire=$this->after_counter_expire($link,$info,$campaign_id);
 			$html.=apply_filters('per_get_expiry_action',$counter_expire,$day,$hrs,$mins,$secs,$campaign_id);
-			$html.="</div></div><div style='clear:both;'></div><div style='display:none;margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div></div>";
+			$html.="<div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div></div></div></div>";
 			$html=apply_filters('per_counter_html',$html,$day,$hrs,$mins,$secs,$campaign_id,$info);
 			return $html;
 			/* code to show counter */
