@@ -44,11 +44,7 @@ $this->unzip($a_name.'.zip', $this->PluginDir."/".$this->AddOnFolder);
 	
     echo "Updated";
 
-
-
 }
-
-
 
 if (!is_array($this->InstalledAddOns))
 
@@ -302,10 +298,7 @@ if (isset($_GET['act']))
 </div>
 
 <style>
-div.updated
-{
-display:none !important;
-}
+
 </style>
 
 <script>

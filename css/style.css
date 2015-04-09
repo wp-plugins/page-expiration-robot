@@ -1,9 +1,104 @@
+#PER_setup_notice{
+  margin: 1em 0;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: #3e85b5;
+  border: 1px solid #9fd0f1;
+  border-bottom-width: 3px;
+  background: #e3eef6;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.PER_noticeImg{
+width:30px;
+height:30px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.PER-notice-hide:hover {
+  background: #9fd0f1;
+  border: 1px solid #79afd3;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.PER-notice-button:hover {
+  background: #eff7fd;
+  cursor: pointer;
+}
+#PER_setup_notice span.PER-icon-itsec {
+  font-size: 2em;
+  line-height: .1;
+  vertical-align: middle;
+  margin: 0;
+  margin-right: .5em;
+  padding: 0;
+  display: inline;
+}
+.PER-notice-hide {
+  border: 1px solid transparent;
+  border-radius: 3px;
+  display: inline-block;
+  float: right;
+  margin: 8px 0;
+  padding: 7px 14px;
+  -webkit-transition: all .1s linear;
+  -moz-transition: all .1s linear;
+  transition: all .1s linear;
+  background: none;
+  font-weight: bold;
+  text-decoration: none;
+}
+.PER-notice-button {
+  background: #9fd0f1;
+  border: 1px solid #79afd3;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 10px 0 10px 10px;
+   padding: 5px 18px 5px 18px;
+   height:25px;
+  -webkit-transition: all .1s linear;
+  -moz-transition: all .1s linear;
+  transition: all .1s linear;
+  color: #0071bc;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.PER-notice-button_gr {
+  background: #7fff7f;
+  border: 1px solid #00cc00;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 10px 0 10px 10px;
+   padding: 5px 18px 5px 18px;
+   height:25px;
+  -webkit-transition: all .1s linear;
+  -moz-transition: all .1s linear;
+  transition: all .1s linear;
+  color: #009900;
+  font-weight: bold;
+  text-decoration: none;
+}
+.PER-notice-button_gr:hover {
+  background: #ccffcc;
+  cursor: pointer;
+}
 .per-wrapper {
 	margin: 30px 15px 0 5px;
 }
-.clearfix {
+.per-wrapper .clearfix {
 	clear: both;
 }
+.per_counter_wrapper #countdown_dashboard_1{max-width:100% !important;}
+.wp-admin .per_counter_wrapper #countdown_dashboard_1{max-width:437px !important;}
 .logo {
 	float: left;
 	position: relative;

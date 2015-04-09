@@ -5,7 +5,7 @@ error_reporting(1);
 Plugin Name: Page Expiration Robot
 Plugin URI: http://www.PageExpirationRobot.com
 Description: The official #1 most powerful, scarcity free countdown plugin ever created for WordPress to create evergreen campaigns to expire posts AND pages on a visitor-by-visitor basis!
-Version: 3.1.3
+Version: 3.1.4
 Author: IMW Enterprises
 Author URI: http://www.IMWenterprises.com/
 License: GPLv2 or later
@@ -51,6 +51,7 @@ get_counter_demo						-dispaly counter demo of selected counter admin
 /* Remember to develop a utility to migrate from old version to this new version. Specially related to database tables. */
 //---Main class for Page Expiration Robot---
 /**/
+require_once(ABSPATH .'wp-includes/pluggable.php');
 include("timezones.php");
 if(!class_exists('PageExpirationRobot'))
 {
@@ -286,8 +287,14 @@ if(!class_exists('PageExpirationRobot'))
 				'exclude_from_search'=>	true,
 				'supports'			 => array('title','author','custom-fields')
 			  );
+			  if(get_option( 'PER_30day_remind_notice') == ''){
+				add_option( 'PER_30day_remind_notice', current_time('timestamp').'/first', '', 'no' );
+			  }
 			register_post_type( $this->CampaignPostType, $args );
+			//add create new notification on admin load
+			
 		}
+		
 		/* Function to add PER Menu in admin */
 		function admin_menu() 
 		{
@@ -374,7 +381,7 @@ if(!class_exists('PageExpirationRobot'))
 			// }
 			
 			wp_localize_script('per_admin_js', 'per_plugin_url', $this->PluginURL);
-            wp_enqueue_script( 'custom-script-handle', plugins_url( '<span class="skimlinks-unlinked">custom-script.js</span>', __FILE__ ), array( 'wp-color-picker' ), false, true );  
+            wp_enqueue_script( 'custom-scripthandle-', plugins_url( '<span class="skimlinks-unlinked">custom-script.js</span>', __FILE__ ), array( 'wp-color-picker' ), false, true );  
 			//for defoult jquery coundown
 			wp_register_script( 'per_default_countdown_style_js_custom', plugins_url( '/js/jcountdown/custom.js', __FILE__ ), array('jquery'), 1, true);
 			wp_enqueue_script("per_default_countdown_style_js_custom");
@@ -591,11 +598,11 @@ if(!class_exists('PageExpirationRobot'))
 				} 
 			} 
 			if (!isset ($_GET['pid'])){
-			wp_redirect( "?page=page_expiration_robot&pid=".$campaign_id."&message=6", 301 );
+			wp_redirect( "admin.php?page=page_expiration_robot&pid=".$campaign_id."&message=6", 301 );
 			 exit;
 			}
 			if (isset ($_GET['pid'])){
-			wp_redirect( "?page=page_expiration_robot&pid=".$campaign_id."&updated=1", 301 );
+			wp_redirect( "admin.php?page=page_expiration_robot&pid=".$campaign_id."&updated=1", 301 );
 			 exit;
 			}	
 						
@@ -685,14 +692,14 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 					 $html.= 'window.location="'.$link.'";';
 				}
 			} 
-	
 		if($info['expiry_method'] == 0){
 			
 			$html .= "document.cookie='campaign_id_rev_date_".$campaign_id."=".$campaign_id."';";
+			
 	  	  if($_COOKIE['campaign_id_rev_date_'.$campaign_id] == $campaign_id)
 			{ 
 			
-                if ($link!="" && ($info['event']==0 || $info['expiry_method'] == 1 || $info['expiry_method'] == 2)){
+                if ($link!="" && ($info['event']==0 || $info['event']==1 || $info['event']==2 || $info['expiry_method'] == 1 || $info['expiry_method'] == 2)){
 					$html.= 'window.location="'.$link.'";'; 
 				}
 				
@@ -701,8 +708,8 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 		}
 		
 		$reset_counter=get_post_meta( $campaign_id, $this->MetaPrefix.'reset_counter', true);
-		
-		if($reset_counter == "reset_counter" && $_COOKIE['refresh_per_reset_'.$campaign_id] == $campaign_id){
+		//if counter expired and redirect option is on redirect to set href
+		if($reset_counter == "reset_counter" && $_COOKIE['refresh_per_reset_'.$campaign_id] == $campaign_id && $info['event'] == 0){
 			
 			$html.= 'window.location="'.$link.'";'; 
 			
@@ -728,7 +735,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				  $html .= "";
 				  
 			  }else{
-				  $html .="
+		 		  $html .="
 		
 					jQuery.ajax({
 					  type: 'POST',
@@ -759,9 +766,9 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 				  $html .= "";
 				  
 			  }else{
-				$html .= "document.cookie='campaign_id_rev=".$campaign_id."';";
+				$html .= "document.cookie='campaign_id_rev".$campaign_id."=".$campaign_id."';";
 			  }
-	  	  if($_COOKIE['campaign_id_rev'] == $campaign_id && $info['event'] != 3 && $info['event'] != 5)
+	  	  if($_COOKIE['campaign_id_rev'.$campaign_id] == $campaign_id && $info['event'] != 3 && $info['event'] != 5)
 			{ 			
               
 				$html.= 'window.location="'.$link.'";'; 
@@ -770,6 +777,13 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 		}
 
 	  }
+	  
+	   if($info['expiry_method'] == 1)
+		  {
+			  
+			$html.= 'window.location="'.$link.'";'; 
+		
+		  }
 			if ($info['event']!=""){
 				if($info['expiry_method'] != 3)
 				{
@@ -1140,7 +1154,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 			$html.=apply_filters('get_counter_text','',$campaign_id,$alignCss,$sizeClass);
 			$wdth=100;
 			if($info['position']=='h' ||$info['position']=='f')$wdth=100;
-			$html.='<div id="countdown_dashboard_'.PageExpirationRobot::$NoOfShortcode.'" style="width:'.$wdth.'%;margin:0px auto;float:'.$alignCss.';"';
+			$html.='<div id="countdown_dashboard_'.PageExpirationRobot::$NoOfShortcode.'" style="width:'.$wdth.'%;margin:0px auto;float:'.$alignCss.';';
 			if($display_counter==false){
 				$html.="display:none;";
 			}
@@ -1312,7 +1326,7 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
 		} 
 			$counter_expire=$this->after_counter_expire($link,$info,$campaign_id);
 			$html.=apply_filters('per_get_expiry_action',$counter_expire,$day,$hrs,$mins,$secs,$campaign_id);
-			$html.="<div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div></div></div></div>";
+			$html.="</div></div></div><div style='display:none; margin:0px auto;' id='complete_info_message_".PageExpirationRobot::$NoOfShortcode."' class='info_message' >".$counterHtml."</div>";
 			$html=apply_filters('per_counter_html',$html,$day,$hrs,$mins,$secs,$campaign_id,$info);
 			return $html;
 			/* code to show counter */
@@ -1379,6 +1393,20 @@ c_name='expirer_timestamp_".$campaign_id."';value='".$mtr."';document.cookie=c_n
   }
 /* Class End */
 }
+
+function PER_uninstall_plugin(){
+		
+	delete_option( 'PER_main_notice_remove');
+	delete_option( 'PER_addon_notice_remove');
+	delete_option( 'PER_addon_notice_later');
+	delete_option( 'PER_30day_remind_notice');
+	delete_option( 'PER_30day_clear_notice');
+	delete_option( 'PER_addon_notice_show');
+	
+}
+
+register_uninstall_hook(__FILE__,'PER_uninstall_plugin');
+
 /* timymce button */
 class PerEditorButton
 {
@@ -1524,6 +1552,204 @@ function get_my_form(){
 
 add_action('wp_ajax_expired_once','expired_once');
 add_action('wp_ajax_nopriv_expired_once','expired_once');
+add_action( 'admin_notices', 'PER_plugin_setup_notice' );
+add_action( 'admin_notices', 'PER_plugin_setup_notice' );
+add_action( 'admin_notices', 'PER_addOns_notice_show' );
+add_action( 'admin_notices', 'PER_30days_notice_show' );
+add_action ('wp_login' , 'PER_addOns_notice');
+if ( isset( $_GET['clear_noti_main'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'PER_not_call' ) ) {
+	
+	$removeMainNotice = get_option('PER_main_notice_remove');
+	
+	if(!$removeMainNotice){
+	
+		add_option( 'PER_main_notice_remove', 'yes', '', 'no' );
+	}
+	
+	if ( sanitize_text_field( $_GET['clear_noti_main'] ) == 'yes' && isset( $_SERVER['HTTP_REFERER'] ) ) {
+
+		wp_redirect( $_SERVER['HTTP_REFERER'], '302' );
+
+	} else {
+
+		wp_redirect( 'admin.php?page=page_expiration_robot', '302' );
+
+	}
+	
+}
+
+if ( isset( $_GET['clear_noti_main_ltBtn'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'PER_not_call' ) ) {
+	
+	$removeMainNotice = get_option('PER_main_notice_remove');
+	
+	if(!$removeMainNotice){
+	
+		add_option( 'PER_main_notice_remove', 'yes', '', 'no' );
+	}
+
+	wp_redirect( 'admin.php?page=page_expiration_robot_new', '302' );
+	
+}
+
+if ( isset( $_GET['clear_noti_addOn'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'PER_not_call' ) ) {
+	
+	$removeMainNotice = get_option('PER_addon_notice_remove');
+	
+	if(!$removeMainNotice){
+	
+		add_option( 'PER_addon_notice_remove', 'yes', '', 'no' );
+	}
+	
+	if ( sanitize_text_field( $_GET['clear_noti_addOn'] ) == 'yes' && isset( $_SERVER['HTTP_REFERER'] ) ) {
+
+		wp_redirect( $_SERVER['HTTP_REFERER'], '302' );
+
+	} else {
+
+		wp_redirect( 'admin.php?page=page_expiration_robot', '302' );
+
+	}
+	
+}
+
+if ( isset( $_GET['later_noti_addOn'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'PER_not_call' ) ) {
+	
+	$removeMainNotice = get_option('PER_addon_notice_later');
+	
+	if(!$removeMainNotice){
+	
+		add_option( 'PER_addon_notice_later', current_time( 'timestamp' ), '', 'no' );
+	}else{
+		
+		update_option( 'PER_addon_notice_later', current_time( 'timestamp' ), '', 'no' );
+		
+	}
+	 
+	if ( sanitize_text_field( $_GET['later_noti_addOn'] ) == 'yes' && isset( $_SERVER['HTTP_REFERER'] ) ) {
+
+		wp_redirect( $_SERVER['HTTP_REFERER'], '302' );
+
+	} else {
+
+		wp_redirect( 'admin.php?page=page_expiration_robot', '302' );
+
+	}
+	
+}
+
+if ( isset( $_GET['later_noti_3oD'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'PER_not_call' ) ) {
+	
+	$removeMainNotice = get_option('PER_30day_remind_notice');
+	
+	if(!$removeMainNotice){
+	
+		add_option( 'PER_30day_remind_notice', current_time( 'timestamp' ), '', 'no' );
+	}else{
+		
+		update_option( 'PER_30day_remind_notice', current_time( 'timestamp' ), '', 'no' );
+		
+	}
+	  
+	if ( sanitize_text_field( $_GET['later_noti_3oD'] ) == 'yes' && isset( $_SERVER['HTTP_REFERER'] ) ) {
+
+		wp_redirect( $_SERVER['HTTP_REFERER'], '302' );
+
+	} else {
+
+		wp_redirect( 'admin.php?page=page_expiration_robot', '302' );
+
+	}
+	
+}
+
+if ( isset( $_GET['clear_noti_30D'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'PER_not_call' ) ) {
+	
+	$removeMainNotice = get_option('PER_30day_clear_notice');
+	
+	if(!$removeMainNotice){
+	
+		add_option( 'PER_30day_clear_notice', 'yes', '', 'no' );
+	}
+	 
+	if ( sanitize_text_field( $_GET['clear_noti_30D'] ) == 'yes' && isset( $_SERVER['HTTP_REFERER'] ) ) {
+
+		wp_redirect( $_SERVER['HTTP_REFERER'], '302' );
+
+	} else {
+
+		wp_redirect( 'admin.php?page=page_expiration_robot', '302' );
+
+	}
+	
+}
+
+function PER_plugin_setup_notice() {
+	
+	$removeMainNotice = get_option('PER_main_notice_remove');
+	
+	if($removeMainNotice != 'yes'){
+
+		echo '<div class="updated" id="PER_setup_notice"><img src="' . WP_PLUGIN_URL . '/page-expiration-robot/' . 'css/images/logo_per1.png" class="PER_noticeImg" alt="logo PER" />' . __( 'Great! Now let\'s create your first scarcity campaign', 'PER_BTN' ) . '<a href="#" onclick="document.location.href=\'?clear_noti_main_ltBtn=yes&_wpnonce=' . wp_create_nonce( 'PER_not_call' ) . '\';" class="PER-notice-button" >' . __( 'Let\'s Do It!', 'PER_BTN' ) . '</a><a href="#" class="PER-notice-hide" onclick="document.location.href=\'?clear_noti_main=yes&_wpnonce=' . wp_create_nonce( 'PER_not_call' ) . '\';">&times;</a>
+			</div>';
+			
+	}
+
+}
+
+function PER_addOns_notice_show() {
+	
+	$removeAddOnNotice = get_option('PER_addon_notice_remove');
+	$showAddOnNotice = get_option('PER_addon_notice_show');;
+	$laterAddOnNotice = floor((current_time('timestamp') - get_option('PER_addon_notice_later'))/60/60/24);
+
+	if($showAddOnNotice == 'yes' && $removeAddOnNotice != "yes" && $laterAddOnNotice >= 7){
+
+		echo '<div class="updated" id="PER_setup_notice"><img src="' . WP_PLUGIN_URL . '/page-expiration-robot/' . 'css/images/logo_per1.png" class="PER_noticeImg" alt="logo PER" />' . __( '<span style="font-weight:bold;color:red;">NEW!</span> Unlock All The Powerful Features Of Page Expiration Robot for 70% discount!', 'PER_BTN' ) . '<a href="https://imwenterprises.net/get-ultimate" target="_blank" class="PER-notice-button_gr" >' . __( 'Learn More', 'PER_BTN' ) . '</a><a href="#" class="PER-notice-button" onclick="document.location.href=\'?later_noti_addOn=yes&_wpnonce=' . wp_create_nonce( 'PER_not_call' ) . '\';">' . __( 'Remind Me Later', 'PER_BTN' ) . '</a><a href="#" class="PER-notice-button" onclick="document.location.href=\'?clear_noti_addOn=yes&_wpnonce=' . wp_create_nonce( 'PER_not_call' ) . '\';">' . __( 'Never Show Again', 'PER_BTN' ) . '</a>
+			</div>';
+			
+	}
+
+}
+
+function PER_30days_notice_show() {
+	
+	$thirtydaysRemNot = get_option('PER_30day_remind_notice');
+	
+	$days = explode('/', $thirtydaysRemNot);
+	
+	$days = $days[0];
+	
+	if(strpos($thirtydaysRemNot,'/first') !== false){
+		
+		$difRate = 30;
+		
+	}else{
+		
+		$difRate = 7;
+		
+	}
+	
+	$laterAddOnNotice = floor((current_time('timestamp') - $days)/60/60/24);
+	
+	if(get_option('PER_30day_clear_notice') != "yes" && $laterAddOnNotice >= $difRate){
+
+		echo '<div class="updated" id="PER_setup_notice"><img src="' . WP_PLUGIN_URL . '/page-expiration-robot/' . 'css/images/logo_per1.png" class="PER_noticeImg" alt="logo PER" />' . __( 'Looks like you\'ve used Page Expiration Robot for a while. Can you please vote for it so we can continue making it awesome?', 'PER_BTN' ) . '<a href="https://wordpress.org/support/view/plugin-reviews/page-expiration-robot " class="PER-notice-button" >' . __( 'I\'d Like To Help!', 'PER_BTN' ) . '</a><a href="#" class="PER-notice-button" onclick="document.location.href=\'?later_noti_3oD=yes&_wpnonce=' . wp_create_nonce( 'PER_not_call' ) . '\';">' . __( 'Remind Me Later', 'PER_BTN' ) . '</a><a href="#" class="PER-notice-button" onclick="document.location.href=\'?clear_noti_30D=yes&_wpnonce=' . wp_create_nonce( 'PER_not_call' ) . '\';">' . __( 'Never Show Again', 'PER_BTN' ) . '</a>
+			</div>';
+			
+	}
+
+}
+
+function PER_addOns_notice(){
+	
+	$removeAddOnNotice = get_option('PER_addon_notice_show');
+	
+	if($removeAddOnNotice != "yes"){
+	
+		add_option( 'PER_addon_notice_show', 'yes', '', 'no' );
+	}
+	
+}
 
 function PER_admin_notice_addon_update() {
 	$raw_addons = wp_remote_get( 'http://pageexpirationrobot.com/v2/latest_addons.php' );      

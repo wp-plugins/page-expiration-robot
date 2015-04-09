@@ -1,7 +1,7 @@
 === Page Expiration Robot - Countdown Timer ===
 Contributors: socratous139
 Tags: scarcity, evergreen, expire pages, expire posts, countdown, timer, counter, expiration, page expiration, page expiration robot, conversion, schedule, timeclock, count down, countdown clock, countdown timer, counter, counter clock, date countdown, date time, date timer, datetime, days until, event, event countdown timer, expiry, expiry countdown, expiry timer, interval countdown, interval countdown timer, interval timer, javascript countdown, jQuery countdown, time countdown, time until, timer, wordpress countdown timer, wp countdown timer,  countdown widget, scarcity samurai, timerlay, countdown monkey
-Version: 3.1.3
+Version: 3.1.4
 Requires at least: 3.8
 Tested up to: 4.1
 Stable tag: 3.13
@@ -81,6 +81,16 @@ For Page Expiration Robot to work, it needs to remember visitor actions between 
 2) Fixed Scheduling for All Visitors: You can specify when a page will stop being available for all visitors and where to send people who try to access it after that date and time. For example, you can send visitors who arrive at the page prior to the launch to a page showing a countdown to the launch. Once the launch has ended, visitors can be sent to a page with a waiting list form or different offer.
 
 == Changelog ==
+
+= 3.1.4 - 9/04/2015 =
+
+* Fix - Notification messages are added in this release.
+* Fix - Alignment issues are fixed in this release.
+* Fix - Layout issues for some themes are fixed in this release.
+* Fix - Redirection issue for Specific Date campaign is fixed in this release.
+* Fix - Continues refreshing issue is fixed in this release. 
+
+* Fix - Layout theme fixes
 
 = 3.1.3 - 3/04/2015 =
 
